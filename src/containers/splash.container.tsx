@@ -14,7 +14,7 @@ const SplashContainer = () => {
       <img alt="background" src={backgroundImage} />
       <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div className=" text-6xl font-semibold text-[#fffff7] ">
-          Under construction
+          Weaw is under construction
         </div>
       </div>
     </div>
