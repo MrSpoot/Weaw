@@ -7,13 +7,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NotFoundContainer from "./containers/not-found.container";
 import SplashContainer from "./containers/splash.container";
 import { RouteProvider } from "./providers/route.provider";
+import LandingContainer from "./containers/landing.container";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <RouteProvider>
-        <SplashContainer />
+        <LandingContainer />
       </RouteProvider>
     ),
   },
