@@ -6,7 +6,7 @@ const ButtonComponent: FunctionComponent<{
 }> = ({ text, onClick }) => {
   return (
     <div
-      className="flex w-full h-10 rounded-lg bg-[#3fb0ac] items-center justify-center hover:bg-[#0f5960] hover:scale-95"
+      className="flex w-full h-10 rounded-lg bg-[#386FA9] items-center justify-center hover:bg-[#2C5682]"
       onClick={onClick}
     >
       <p className="font-semibold text-white">{text}</p>

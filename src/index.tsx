@@ -8,6 +8,7 @@ import NotFoundContainer from "./containers/not-found.container";
 import SplashContainer from "./containers/splash.container";
 import { RouteProvider } from "./providers/route.provider";
 import LandingContainer from "./containers/landing.container";
+import AppContainer from "./containers/app.container";
 
 const router = createBrowserRouter([
   {
@@ -18,14 +19,22 @@ const router = createBrowserRouter([
       </RouteProvider>
     ),
   },
-  /*{
-    path: "/login",
+  {
+    path: "/app",
+    element: (
+      <RouteProvider>
+        <AppContainer />
+      </RouteProvider>
+    ),
+  },
+  {
+    path: "/auth",
     element: (
       <RouteProvider>
         <LoginContainer />
       </RouteProvider>
     ),
-  },*/
+  },
   {
     path: "/*",
     element: (
@@ -38,7 +47,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <div className="h-screen w-screen">
+    <div className="h-screen w-screen bg-[#203D5B]">
       <RouterProvider router={router} />
     </div>
   </React.StrictMode>
