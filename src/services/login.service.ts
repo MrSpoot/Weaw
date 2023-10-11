@@ -4,9 +4,10 @@ import { User } from "../types/user.type";
 
 const servicePath = "/auth";
 
-const login = (login: Login) => {
+const login = (login: Login) : Promise<String> => {
   return http.post(servicePath + "/signin", login).then((res: any) => {
-    return res;
+    http.defaults.headers.common['Authorization'] = `Bearer ${res.data}`
+    return res.data;
   });
 };
 
@@ -16,15 +17,8 @@ const register = (user: User) => {
   });
 };
 
-const isSecured = () => {
-  return http.get(servicePath).then((res: any) => {
-    console.log(res);
-  });
-};
-
 const loginService = {
   login,
-  isSecured,
   register,
 };
 

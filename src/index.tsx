@@ -9,6 +9,9 @@ import SplashContainer from "./containers/splash.container";
 import { RouteProvider } from "./providers/route.provider";
 import LandingContainer from "./containers/landing.container";
 import AppContainer from "./containers/app.container";
+import { Provider } from "react-redux";
+import store from "./store";
+import LoadingAppContainer from "./containers/loading.app.container";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +26,9 @@ const router = createBrowserRouter([
     path: "/app",
     element: (
       <RouteProvider>
-        <AppContainer />
+        <LoadingAppContainer>
+          <AppContainer />
+        </LoadingAppContainer>
       </RouteProvider>
     ),
   },
@@ -46,11 +51,11 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <div className="h-screen w-screen bg-[#203D5B]">
+  <Provider store={store}>
+    <div className="h-screen w-screen bg-background-semi-dark">
       <RouterProvider router={router} />
     </div>
-  </React.StrictMode>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

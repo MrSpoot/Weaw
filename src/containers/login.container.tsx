@@ -3,9 +3,7 @@ import ButtonComponent from "../components/button.component";
 import InputComponent from "../components/input.component";
 import loginService from "../services/login.service";
 import { useState } from "react";
-import { Login } from "../types/login.type";
 import { useRoute } from "../providers/route.provider";
-import backgroundImage from "../resources/layered-waves-haikei.svg";
 
 const LoginContainer = () => {
   const { navigateTo } = useRoute();
@@ -24,7 +22,7 @@ const LoginContainer = () => {
   return (
     <>
       <div className="flex items-center justify-center w-full h-full">
-        <div className="flex flex-col w-1/5 aspect-square items-center rounded-3xl bg-[#132335] shadow-2xl shadow-gray-900 px-16 py-12 gap-12 ">
+        <div className="flex flex-col aspect-square items-center rounded-3xl bg-background shadow-2xl shadow-background-dark px-16 py-12 gap-12 ">
           {isRegistering ? (
             <>
               <div className="rounded-full h-24 w-24 bg-white"></div>
@@ -55,14 +53,10 @@ const LoginContainer = () => {
                 <ButtonComponent
                   text="Sign Up"
                   onClick={() => {
-                    firstname.length > 0 &&
-                      lastname.length > 0 &&
-                      nickname.length > 0 &&
-                      password.length > 8 &&
-                      email.length > 0 &&
-                      confirmPassword.length > 0 &&
+                    confirmPassword.length > 0 &&
                       confirmPassword === password &&
                       loginService.register({
+                        id: "",
                         firstname: firstname,
                         lastname: lastname,
                         nickname: nickname,
@@ -73,11 +67,11 @@ const LoginContainer = () => {
                 />
               </div>
               <div className="flex gap-1">
-                <div className=" text-gray-100">
+                <div className=" text-gray-100 flex-nowrap">
                   {"Already have an account ?"}
                 </div>
                 <div
-                  className="text-[#386FA9] hover:text-[#2C5682] font-bold"
+                  className="text-secondary hover:text-secondary-dark font-bold"
                   onClick={() => setIsRegistering(false)}
                 >
                   {"Sign In"}
@@ -101,7 +95,7 @@ const LoginContainer = () => {
                       loginService
                         .login({ login: login, password: password })
                         .then(() => {
-                          loginService.isSecured();
+                          navigateTo("app");
                         })
                         .catch();
                     }}
@@ -112,7 +106,7 @@ const LoginContainer = () => {
                     {"Don't have an account ?"}
                   </div>
                   <div
-                    className="text-[#386FA9] hover:text-[#2C5682] font-bold"
+                    className="text-secondary hover:text-secondary-dark font-bold"
                     onClick={() => setIsRegistering(true)}
                   >
                     {"Sign Up"}
