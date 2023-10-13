@@ -16,19 +16,26 @@ const AppContainer = () => {
     <>
       <div className="flex h-full w-full">
         <div className="flex h-full">
-          <div className="flex flex-col bg-secondary-dark h-full overflow-y-scroll">
+          {/* <div className="flex flex-col bg-secondary-dark h-full overflow-y-scroll">
             <ServerBubbleComponent />
-          </div>
+          </div> */}
           <div className="flex flex-col w-4/6 bg-background h-full overflow-y-scroll">
-            {conversations.map((conv) => {
-              return (
-                <ConversationComponent
-                  key={conv.conversation.id}
-                  conversation={conv.conversation}
-                  onClick={setSelectedConversation}
-                />
-              );
-            })}
+            <div className="flex gap-2 h-full bg-red-200 p-2">
+              <div>
+                <div className="p-2 font-bold text-[#6059e8]">
+                  PRIVATES MESSAGES
+                </div>
+                {conversations.map((conv) => {
+                  return (
+                    <ConversationComponent
+                      key={conv.conversation.id}
+                      conversation={conv.conversation}
+                      onClick={setSelectedConversation}
+                    />
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
         <div className="w-10/12 h-full">

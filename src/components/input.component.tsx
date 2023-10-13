@@ -16,7 +16,7 @@ const InputComponent: FunctionComponent<{
   return (
     <div>
       <input
-        className="w-full h-12 rounded-lg p-4 focus:outline-none"
+        className="w-full h-12 rounded-lg p-4 focus:outline-none border-[#6059e8] border-2"
         type={secret ? "password" : "text"}
         placeholder={placeholder}
         onChange={(event) => setValue && setValue(event.target.value)}

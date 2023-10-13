@@ -52,7 +52,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>
-    <div className="h-screen w-screen bg-background-semi-dark">
+    <div className="h-screen w-screen bg-gray-100">
       <RouterProvider router={router} />
     </div>
   </Provider>
