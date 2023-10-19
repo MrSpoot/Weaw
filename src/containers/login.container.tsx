@@ -1,164 +1,292 @@
-import { useNavigate } from "react-router-dom";
-import ButtonComponent from "../components/button.component";
-import InputComponent from "../components/input.component";
-import loginService from "../services/login.service";
 import { useEffect, useState } from "react";
 import { useRoute } from "../providers/route.provider";
-import ProgressBarComponent from "../components/progress-bar.component";
+import {
+  Center,
+  Flex,
+  Heading,
+  VStack,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  Button,
+  Box,
+  Text,
+  Progress,
+  Stepper,
+  Step,
+  StepIcon,
+  StepIndicator,
+  StepStatus,
+  useSteps,
+  InputRightElement,
+  FormControl,
+  Checkbox,
+  HStack,
+} from "@chakra-ui/react";
+import { EmailIcon, InfoIcon, LockIcon, ViewIcon } from "@chakra-ui/icons";
+import { User } from "../types/user.type";
+import loginService from "../services/login.service";
 
 const LoginContainer = () => {
-  const { navigateTo } = useRoute();
+  const [isLogin, setIsLogin] = useState(true);
 
-  const [login, setLogin] = useState("");
-
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [isRegistering, setIsRegistering] = useState(false);
-
-  const [registerPage, setRegisterPage] = useState(1);
-
-  useEffect(() => {
-    setRegisterPage(1);
-    setFirstname("");
-    setLastname("");
-    setNickname("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-  }, [isRegistering]);
-
-  function registerFunction() {
-    confirmPassword.length > 0 &&
-      confirmPassword === password &&
-      loginService.register({
-        id: "",
-        firstname: firstname,
-        lastname: lastname,
-        nickname: nickname,
-        email: email,
-        password: password,
-      });
-  }
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+  };
 
   return (
     <>
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="flex flex-col items-center rounded-3xl bg-white shadow-2xl shadow-background-dark px-16 py-12 border-2 border-gray-100 gap-6 ">
-          {isRegistering ? (
-            <>
-              <div className="w-full text-xl font-semibold text-[#6059e8]">
-                Register
-              </div>
-              <ProgressBarComponent step={3} actualStep={registerPage} />
-              {registerPage === 1 && (
-                <>
-                  <InputComponent
-                    placeholder="Firstname"
-                    setValue={setFirstname}
-                  />
-                  <InputComponent
-                    placeholder="Lastname"
-                    setValue={setLastname}
-                  />
-                </>
-              )}
-              {registerPage === 2 && (
-                <>
-                  <InputComponent placeholder="Email" setValue={setEmail} />
-                  <InputComponent
-                    placeholder="Nickname"
-                    setValue={setNickname}
-                  />
-                </>
-              )}
-              {registerPage === 3 && (
-                <>
-                  <InputComponent
-                    placeholder="Password"
-                    secret
-                    setValue={setPassword}
-                  />
-                  <InputComponent
-                    placeholder="Confirm Password"
-                    secret
-                    onError={
-                      confirmPassword.length > 0 && confirmPassword !== password
-                    }
-                    onErrorText="Password must match"
-                    setValue={setConfirmPassword}
-                  />
-                </>
-              )}
-              <div className="w-3/4 px-2">
-                {registerPage === 3 ? (
-                  <ButtonComponent
-                    text={"Sign up"}
-                    onClick={registerFunction}
-                  />
-                ) : (
-                  <ButtonComponent
-                    text={"Next"}
-                    onClick={() => setRegisterPage(registerPage + 1)}
-                  />
-                )}
-              </div>
-              <div className="flex gap-1">
-                <div className=" text-gray-800 flex-nowrap">
-                  {"Already have an account ?"}
-                </div>
-                <div
-                  className="text-[#6059e8] hover:text-secondary-dark font-bold"
-                  onClick={() => setIsRegistering(false)}
-                >
-                  {"Sign In"}
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="w-full text-xl font-semibold text-[#6059e8]">
-                Login
-              </div>
-              <InputComponent placeholder="Username" setValue={setLogin} />
-              <InputComponent
-                placeholder="Password"
-                secret
-                setValue={setPassword}
-              />
-              <div className="w-3/4 px-2">
-                <ButtonComponent
-                  text="Sign In"
-                  onClick={() => {
-                    loginService
-                      .login({ login: login, password: password })
-                      .then(() => {
-                        navigateTo("app");
-                      })
-                      .catch();
-                  }}
-                />
-              </div>
-              <div className="flex gap-1 justify-center">
-                <div className=" text-gray-800">
-                  {"Don't have an account ?"}
-                </div>
-                <div
-                  className="text-[#6059e8] hover:text-secondary-dark font-bold"
-                  onClick={() => setIsRegistering(true)}
-                >
-                  {"Sign Up"}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+      {isLogin ? (
+        <LoginForm toggleForm={toggleForm} />
+      ) : (
+        <RegistrationForm toggleForm={toggleForm} />
+      )}
     </>
+  );
+};
+
+const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
+  return (
+    <Center h="100vh" bg="gray.100">
+      <Flex
+        direction="column"
+        p={8}
+        rounded={16}
+        w="md"
+        bg="white"
+        boxShadow="lg"
+        gap={6}
+      >
+        <Heading textAlign="center">Se connecter</Heading>
+        <VStack spacing={4} align="stretch">
+          <FormControl>
+            <InputGroup>
+              <InputLeftElement children={<EmailIcon color="gray.300" />} />
+              <Input type="email" placeholder="Adresse email" />
+            </InputGroup>
+          </FormControl>
+          <InputGroup>
+            <InputLeftElement children={<LockIcon color="gray.300" />} />
+            <Input type="password" placeholder="Mot de passe" />
+          </InputGroup>
+        </VStack>
+        <Box gap={6}>
+          <HStack justify="space-between" mb={4}>
+            <Checkbox defaultChecked>Remember me</Checkbox>
+            <Button variant="text" color={"blue.500"} size="sm">
+              Forgot password?
+            </Button>
+          </HStack>
+
+          <Button colorScheme="blue" w="full">
+            Connexion
+          </Button>
+        </Box>
+        <Center>
+          <Text mt={2} color="gray.500">
+            Pas encore de compte ?
+            <Text
+              as="span"
+              color="blue.500"
+              cursor="pointer"
+              ml={1}
+              onClick={toggleForm}
+            >
+              S'inscrire
+            </Text>
+          </Text>
+        </Center>
+      </Flex>
+    </Center>
+  );
+};
+
+const steps = [
+  { title: "First", description: "Contact Info" },
+  { title: "Second", description: "Date & Time" },
+  { title: "Third", description: "Select Rooms" },
+];
+
+const RegistrationForm: React.FC<{ toggleForm: () => void }> = ({
+  toggleForm,
+}) => {
+  const { activeStep, setActiveStep } = useSteps({
+    index: 1,
+    count: steps.length,
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const activeStepText = steps[activeStep].description;
+
+  const max = steps.length - 1;
+  const progressPercent = (activeStep / max) * 100;
+
+  const [user, setUser] = useState<User>({
+    id: undefined,
+    nickname: "",
+    email: "",
+    password: "",
+  });
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  return (
+    <Center h="100vh" bg="gray.100">
+      <Flex
+        direction="column"
+        p={8}
+        rounded={16}
+        w="md"
+        bg="white"
+        boxShadow="lg"
+      >
+        <Heading mb={6} textAlign="center">
+          S'inscrire
+        </Heading>
+        <Box position="relative" mb={6}>
+          <Stepper size="sm" index={activeStep} gap="0">
+            {steps.map((step, index) => (
+              <Step key={index}>
+                <StepIndicator bg="white" zIndex={5}>
+                  <StepStatus complete={<StepIcon />} />
+                </StepIndicator>
+              </Step>
+            ))}
+          </Stepper>
+          <Progress
+            value={progressPercent}
+            position="absolute"
+            height="3px"
+            width="full"
+            top="10px"
+          />
+        </Box>
+        <FormControl>
+          <VStack spacing={4} align="stretch">
+            {activeStep === 1 && (
+              <>
+                <InputGroup>
+                  <InputLeftElement children={<EmailIcon color="gray.300" />} />
+                  <Input
+                    type="email"
+                    placeholder="Adresse email"
+                    onChange={(e) =>
+                      setUser((prevState) => ({
+                        ...prevState,
+                        email: e.target.value,
+                      }))
+                    }
+                  />
+                </InputGroup>
+                <InputGroup>
+                  <InputLeftElement children={<InfoIcon color="gray.300" />} />
+                  <Input
+                    type="text"
+                    placeholder="Pseudo"
+                    onChange={(e) =>
+                      setUser((prevState) => ({
+                        ...prevState,
+                        nickname: e.target.value,
+                      }))
+                    }
+                  />
+                </InputGroup>
+              </>
+            )}
+            {activeStep === 2 && (
+              <>
+                <InputGroup>
+                  <InputLeftElement children={<LockIcon color="gray.300" />} />
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Mot de passe"
+                    onChange={(e) =>
+                      setUser((prevState) => ({
+                        ...prevState,
+                        password: e.target.value,
+                      }))
+                    }
+                  />
+                  <InputRightElement
+                    children={
+                      <ViewIcon
+                        color="gray.300"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    }
+                  />
+                </InputGroup>
+                <InputGroup>
+                  <InputLeftElement children={<LockIcon color="gray.300" />} />
+                  <Input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirmer le mot de passe"
+                    errorBorderColor="crimson"
+                    isInvalid={
+                      user.password !== confirmPassword &&
+                      confirmPassword.length > 0
+                    }
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <InputRightElement
+                    children={
+                      <ViewIcon
+                        color="gray.300"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                      />
+                    }
+                  />
+                </InputGroup>
+              </>
+            )}
+          </VStack>
+        </FormControl>
+        <Flex mt={6} justify="space-between">
+          {activeStep > 1 && (
+            <Button
+              variant="outline"
+              onClick={() => setActiveStep((s) => s - 1)}
+            >
+              Précédent
+            </Button>
+          )}
+          {activeStep < 2 ? (
+            <Button
+              colorScheme="blue"
+              onClick={() => setActiveStep((s) => s + 1)}
+            >
+              Suivant
+            </Button>
+          ) : (
+            <Button
+              colorScheme="green"
+              onClick={() => {
+                loginService.register(user);
+              }}
+            >
+              Soumettre
+            </Button>
+          )}
+        </Flex>
+        <Center mt={4}>
+          <Text mt={2} color="gray.500">
+            Déjà un compte?
+            <Text
+              as="span"
+              color="blue.500"
+              cursor="pointer"
+              ml={1}
+              onClick={toggleForm}
+            >
+              Se connecter
+            </Text>
+          </Text>
+        </Center>
+      </Flex>
+    </Center>
   );
 };
 

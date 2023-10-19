@@ -1,57 +1,123 @@
-import { useNavigate } from "react-router-dom";
-import ConversationComponent from "../components/conversation.component";
-import ServerBubbleComponent from "../components/server.bubble.component";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import { useEffect, useState } from "react";
-import MessageListComponent from "../components/message.list.component";
-import InputComponent from "../components/input.component";
+import { AddIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Flex,
+  Text,
+  Input,
+  Button,
+  VStack,
+  Divider,
+} from "@chakra-ui/react";
+import React from "react";
+import UserCardComponent from "../components/user.card.component";
 
-const AppContainer = () => {
-  const conversations = useSelector((state: RootState) => state.conversations);
+interface ChannelProps {
+  name: string;
+}
 
-  const [selectedConversation, setSelectedConversation] = useState<string>();
+const Channel: React.FC<ChannelProps> = ({ name }) => (
+  <Box py={2} px={4} _hover={{ bg: "gray.600", cursor: "pointer" }}>
+    #{name}
+  </Box>
+);
 
+interface MessageProps {
+  author: string;
+  content: string;
+}
+
+const Message: React.FC<MessageProps> = ({ author, content }) => (
+  <Flex direction="row" p={3} bg="blue.100" rounded={16} w="100%">
+    <Box w="40px" h="40px" borderRadius="full" bg="blue.500" mr={4} />
+    <VStack align="start" spacing={1}>
+      <Text fontWeight="bold">{author}</Text>
+      <Text>{content}</Text>
+    </VStack>
+  </Flex>
+);
+
+const AppContainer: React.FC = () => {
   return (
-    <>
-      <div className="flex h-full w-full">
-        <div className="flex h-full">
-          {/* <div className="flex flex-col bg-secondary-dark h-full overflow-y-scroll">
-            <ServerBubbleComponent />
-          </div> */}
-          <div className="flex flex-col w-4/6 bg-background h-full overflow-y-scroll">
-            <div className="flex gap-2 h-full bg-red-200 p-2">
-              <div>
-                <div className="p-2 font-bold text-[#6059e8]">
-                  PRIVATES MESSAGES
-                </div>
-                {conversations.map((conv) => {
-                  return (
-                    <ConversationComponent
-                      key={conv.conversation.id}
-                      conversation={conv.conversation}
-                      onClick={setSelectedConversation}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-10/12 h-full">
-          {selectedConversation && (
-            <div className="flex flex-col h-full justify-end p-4 gap-8">
-              <div className="flex flex-grow overflow-y-scroll">
-                <MessageListComponent conversationId={selectedConversation} />
-              </div>
-              <div>
-                <InputComponent placeholder="TEST" />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+    <Box minH="100vh" bg="gray.200">
+      <Flex h="100vh" justify={"flex-start"}>
+        <Flex
+          direction="column"
+          bg="gray.300"
+          w="80px"
+          justifyContent="space-between"
+        >
+          <VStack gap="2" p={4}>
+            <Box w="50px" h="50px" borderRadius="full" bg="blue.500" />
+            <Box w="50px" h="50px" borderRadius="full" bg="blue.500" />
+            <Box w="50px" h="50px" borderRadius="full" bg="blue.500" />
+            <Box w="50px" h="50px" borderRadius="full" bg="blue.500" />
+            <Box w="50px" h="50px" borderRadius="full" bg="blue.500" />
+          </VStack>
+          <VStack mb={4} justify={"flex-end"}>
+            <Button w="50px" h="50px" colorScheme="blue" rounded={"full"}>
+              <AddIcon />
+            </Button>
+          </VStack>
+        </Flex>
+
+        {/* Channel List */}
+        <Flex
+          direction="column"
+          w="240px"
+          bg="gray.850"
+          overflowY="auto"
+          p={2}
+          gap={1}
+        >
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+          <UserCardComponent />
+        </Flex>
+
+        <VStack flex={1}>
+          {/* Chat Area */}
+          <Flex direction={"row"} h="100vh" overflowY="auto">
+            <Flex
+              direction="column-reverse"
+              overflowY="auto"
+              gap={2}
+              w={"100%"}
+            >
+              <Message author="John" content="Hello, how are you?" />
+              <Message author="Doe" content="I'm fine, thank you!" />
+              <Message author="John" content="Hello, how are you?" />
+              <Message author="Doe" content="I'm fine, thank you!" />
+              <Message author="John" content="Hello, how are you?" />
+              <Message author="Doe" content="I'm fine, thank you!" />
+              <Message author="John" content="Hello, how are you?" />
+              <Message author="Doe" content="I'm fine, thank you!" />
+              <Message author="John" content="Hello, how are you?" />
+              <Message author="Doe" content="I'm fine, thank you!" />
+              <Message author="John" content="Hello, how are you?" />
+              <Message author="Doe" content="I'm fine, thank you!" />
+            </Flex>
+          </Flex>
+
+          {/* Message Input */}
+          <Box bg="gray.850" p={4} w={"100%"}>
+            <Input
+              placeholder="Type your message here..."
+              variant="filled"
+              size="lg"
+            />
+          </Box>
+        </VStack>
+      </Flex>
+    </Box>
   );
 };
 
