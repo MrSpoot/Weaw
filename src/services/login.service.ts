@@ -4,7 +4,7 @@ import { User } from "../types/user.type";
 
 const servicePath = "/auth";
 
-const login = (login: Login) : Promise<String> => {
+const login = (login: Login) : Promise<string> => {
   return http.post(servicePath + "/signin", login).then((res: any) => {
     http.defaults.headers.common['Authorization'] = `Bearer ${res.data}`
     return res.data;

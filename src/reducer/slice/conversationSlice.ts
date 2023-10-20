@@ -4,6 +4,7 @@ import { Conversation } from '../../types/conversation.type';
 import { Message } from '../../types/message.type';
 import store from '../../store';
 import { fetchAndAddConversation, fetchAndAddConversations, loadMoreMessages } from '../thunk/conversation.tunk';
+import { WebSocketPrivateMessagePayload } from '../../types/websocket.type';
 
 interface ConversationsState {
     conversation: Conversation,
@@ -20,7 +21,13 @@ const initialState: ConversationsState[] = []
 const conversationsSlice = createSlice({
     name: 'conversations',
     initialState,
-    reducers: {},
+    reducers: {
+        addNewMessage(state, action: PayloadAction<WebSocketPrivateMessagePayload>){
+            const conversationState = state.find(c => c.conversation.id === action.payload.conversationId);
+
+            
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchAndAddConversation.fulfilled, (state, action) => {
             const { conversation, messagesData } = action.payload;

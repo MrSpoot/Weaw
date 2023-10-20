@@ -26,6 +26,8 @@ import {
 import { EmailIcon, InfoIcon, LockIcon, ViewIcon } from "@chakra-ui/icons";
 import { User } from "../types/user.type";
 import loginService from "../services/login.service";
+import { Login } from "../types/login.type";
+import { useWebSocket } from "../providers/websocket.provider";
 
 const LoginContainer = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -46,6 +48,12 @@ const LoginContainer = () => {
 };
 
 const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
+  const [login, setLogin] = useState<string>();
+  const [password, setPassword] = useState<string>();
+
+  const { navigateTo } = useRoute();
+  const { connect } = useWebSocket();
+
   return (
     <Center h="100vh" bg="gray.100">
       <Flex
@@ -62,12 +70,20 @@ const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
           <FormControl>
             <InputGroup>
               <InputLeftElement children={<EmailIcon color="gray.300" />} />
-              <Input type="email" placeholder="Adresse email" />
+              <Input
+                type="email"
+                placeholder="Adresse email"
+                onChange={(e) => setLogin(e.target.value)}
+              />
             </InputGroup>
           </FormControl>
           <InputGroup>
             <InputLeftElement children={<LockIcon color="gray.300" />} />
-            <Input type="password" placeholder="Mot de passe" />
+            <Input
+              type="password"
+              placeholder="Mot de passe"
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </InputGroup>
         </VStack>
         <Box gap={6}>
@@ -78,7 +94,20 @@ const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
             </Button>
           </HStack>
 
-          <Button colorScheme="blue" w="full">
+          <Button
+            colorScheme="blue"
+            w="full"
+            onClick={() =>
+              login &&
+              password &&
+              loginService
+                .login({ login: login, password: password })
+                .then((token) => {
+                  connect(token);
+                })
+                .then(() => navigateTo("app"))
+            }
+          >
             Connexion
           </Button>
         </Box>
@@ -264,7 +293,7 @@ const RegistrationForm: React.FC<{ toggleForm: () => void }> = ({
             <Button
               colorScheme="green"
               onClick={() => {
-                loginService.register(user);
+                loginService.register(user).then(toggleForm);
               }}
             >
               Soumettre

@@ -1,5 +1,6 @@
 import { Avatar, AvatarBadge, Box, Flex, Text } from "@chakra-ui/react";
 import { FunctionComponent, useState } from "react";
+import { User } from "../types/user.type";
 
 const getStatus = (status: string) => {
   if (status === "online") {
@@ -15,7 +16,10 @@ const getStatus = (status: string) => {
   }
 };
 
-const UserCardComponent: React.FC = () => {
+const UserCardComponent: React.FC<{
+  user: User;
+  onClick: (user: User) => void;
+}> = ({ user, onClick }) => {
   const phrases: string[] = ["online", "red", "absent", "disconnect"];
 
   const handleRandomize = () => {
@@ -24,12 +28,12 @@ const UserCardComponent: React.FC = () => {
   };
 
   return (
-    <Box px={4} py={2} bg="blue.100" rounded={8}>
+    <Box px={4} py={2} bg="blue.100" rounded={8} onClick={() => onClick(user)}>
       <Flex gap={4}>
         <Avatar>{getStatus(handleRandomize())}</Avatar>
         <Flex direction={"column"}>
-          <Text>Jean</Text>
-          <Text fontSize={"sm"}>Jean</Text>
+          <Text>{user.nickname}</Text>
+          <Text fontSize={"sm"}>En ligne</Text>
         </Flex>
       </Flex>
     </Box>
