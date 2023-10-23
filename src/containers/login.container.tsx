@@ -97,16 +97,18 @@ const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
           <Button
             colorScheme="blue"
             w="full"
-            onClick={() =>
+            onClick={() => {
+              console.log(process.env.REACT_APP_SERVER_DOMAIN);
+              console.log(process.env.REACT_APP_SERVER_PORT);
               login &&
-              password &&
-              loginService
-                .login({ login: login, password: password })
-                .then((token) => {
-                  connect(token);
-                })
-                .then(() => navigateTo("app"))
-            }
+                password &&
+                loginService
+                  .login({ login: login, password: password })
+                  .then((token) => {
+                    connect(token);
+                  })
+                  .then(() => navigateTo("app"));
+            }}
           >
             Connexion
           </Button>
