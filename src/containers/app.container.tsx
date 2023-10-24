@@ -22,6 +22,7 @@ import {
   WebSocketPrivateMessagePayload,
 } from "../types/websocket.type";
 import conversationService from "../services/conversation.service";
+import UserActionComponent from "../components/user.action.component";
 
 interface ChannelProps {
   name: string;
@@ -39,7 +40,7 @@ interface MessageProps {
 }
 
 const Message: React.FC<MessageProps> = ({ author, content }) => (
-  <Flex direction="row" p={3} bg="blue.100" rounded={16} w="100%">
+  <Flex direction="row" p={3} rounded={16} w="100%">
     <Box w="40px" h="40px" borderRadius="full" bg="blue.500" mr={4} />
     <VStack align="start" spacing={1}>
       <Text fontWeight="bold">{author}</Text>
@@ -118,31 +119,42 @@ const AppContainer: React.FC = () => {
           </VStack>
         </Flex>
 
-        <Flex
-          direction="column"
-          w="240px"
-          bg="gray.850"
-          overflowY="auto"
-          p={2}
-          gap={1}
-        >
-          {userState.actualUser && (
-            <UserCardComponent user={userState.actualUser} onClick={() => {}} />
-          )}
-          {userState.social?.friends.map((u, index) => {
-            return (
+        <Flex direction="column" justifyContent={"space-between"}>
+          <Flex
+            direction="column"
+            w="240px"
+            bg="gray.850"
+            overflowY="auto"
+            p={2}
+            gap={1}
+          >
+            {userState.actualUser && (
               <UserCardComponent
-                key={index}
-                user={u}
-                onClick={changeConversation}
+                user={userState.actualUser}
+                onClick={() => {}}
               />
-            );
-          })}
+            )}
+            {userState.social?.friends.map((u, index) => {
+              return (
+                <UserCardComponent
+                  key={index}
+                  user={u}
+                  onClick={changeConversation}
+                />
+              );
+            })}
+          </Flex>
+          {userState.actualUser && (
+            <UserActionComponent
+              user={userState.actualUser}
+              onClick={() => {}}
+            />
+          )}
         </Flex>
 
         <VStack flex={1}>
           {/* Chat Area */}
-          <Flex direction={"row"} h="100vh" overflowY="auto">
+          <Flex direction={"row"} h="100vh" overflowY="auto" w={"full"} px={4}>
             <Flex
               direction="column-reverse"
               overflowY="auto"
