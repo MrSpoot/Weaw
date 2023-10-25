@@ -9,6 +9,9 @@ import {
   Divider,
   useStatStyles,
   HStack,
+  Alert,
+  AlertIcon,
+  Stack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import UserCardComponent from "../components/user.card.component";
@@ -23,6 +26,9 @@ import {
 } from "../types/websocket.type";
 import conversationService from "../services/conversation.service";
 import UserActionComponent from "../components/user.action.component";
+import FriendCardComponent from "../components/friend.card.component";
+
+type pageType = "FRIENDS_LIST" | "CONVERSATION";
 
 interface ChannelProps {
   name: string;
@@ -56,6 +62,8 @@ const AppContainer: React.FC = () => {
   );
 
   const { sendMessage } = useWebSocket();
+
+  const [pageType, setPageType] = useState<pageType>("FRIENDS_LIST");
 
   const [conversation, setConversation] = useState<Conversation>();
   const [actualWritedMessage, setActualWritedMessage] = useState("");
@@ -122,7 +130,7 @@ const AppContainer: React.FC = () => {
         <Flex direction="column" justifyContent={"space-between"}>
           <Flex
             direction="column"
-            w="240px"
+            w="250px"
             bg="gray.850"
             overflowY="auto"
             p={2}
@@ -152,33 +160,67 @@ const AppContainer: React.FC = () => {
           )}
         </Flex>
 
-        <VStack flex={1}>
-          {/* Chat Area */}
-          <Flex direction={"row"} h="100vh" overflowY="auto" w={"full"} px={4}>
-            <Flex
-              direction="column-reverse"
-              overflowY="auto"
-              gap={2}
-              w={"100%"}
-            >
-              <Message author="John" content="Hello, how are you?" />
-              <Message author="Doe" content="I'm fine, thank you!" />
+        {pageType === "FRIENDS_LIST" && (
+          <>
+            <Flex direction={"column"} gap={2} p={2}>
+              <Flex direction={"column"}>
+                <Text fontWeight={"bold"}>AJOUTER UN AMIS</Text>
+                <Text fontSize={"sm"}>
+                  Tu peu ajouter des amis grâce à leurs pseudo Weaw
+                </Text>
+              </Flex>
+              <Input
+                placeholder="Pseudo"
+                variant="filled"
+                size="md"
+                onChange={(e) => setActualWritedMessage(e.target.value)}
+              />
             </Flex>
-          </Flex>
 
-          {/* Message Input */}
-          <HStack bg="gray.850" p={4} w={"100%"}>
-            <Input
-              placeholder="Type your message here..."
-              variant="filled"
-              size="lg"
-              onChange={(e) => setActualWritedMessage(e.target.value)}
-            />
-            <Button colorScheme="blue" onClick={_sendMessage}>
-              Send
-            </Button>
-          </HStack>
-        </VStack>
+            <VStack flex={1}>
+              <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
+                {userState.social?.friends.map((friends) => (
+                  <FriendCardComponent user={friends} onClick={() => {}} />
+                ))}
+              </Flex>
+            </VStack>
+          </>
+        )}
+
+        {pageType === "CONVERSATION" && (
+          <VStack flex={1}>
+            <Flex
+              direction={"row"}
+              h="100vh"
+              overflowY="auto"
+              w={"full"}
+              px={4}
+            >
+              <Flex
+                direction="column-reverse"
+                overflowY="auto"
+                gap={2}
+                w={"100%"}
+              >
+                <Message author="John" content="Hello, how are you?" />
+                <Message author="Doe" content="I'm fine, thank you!" />
+              </Flex>
+            </Flex>
+
+            {/* Message Input */}
+            <HStack bg="gray.850" p={4} w={"100%"}>
+              <Input
+                placeholder="Type your message here..."
+                variant="filled"
+                size="lg"
+                onChange={(e) => setActualWritedMessage(e.target.value)}
+              />
+              <Button colorScheme="blue" onClick={_sendMessage}>
+                Send
+              </Button>
+            </HStack>
+          </VStack>
+        )}
       </Flex>
     </Box>
   );

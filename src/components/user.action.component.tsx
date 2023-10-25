@@ -41,10 +41,28 @@ const UserActionComponent: React.FC<{
           </Flex>
         </Flex>
 
-        <Flex gap={2}>
-          <SettingsIcon boxSize={5} color={"gray.500"} />
-          <SettingsIcon boxSize={5} color={"gray.500"} />
-          <SettingsIcon boxSize={5} color={"gray.500"} />
+        <Flex gap={1}>
+          <SettingsIcon
+            p={1}
+            boxSize={7}
+            color={"gray.500"}
+            _hover={{ bg: "blue.200" }}
+            rounded={5}
+          />
+          <SettingsIcon
+            p={1}
+            boxSize={7}
+            color={"gray.500"}
+            _hover={{ bg: "blue.200" }}
+            rounded={5}
+          />
+          <SettingsIcon
+            p={1}
+            boxSize={7}
+            color={"gray.500"}
+            _hover={{ bg: "blue.200" }}
+            rounded={5}
+          />
         </Flex>
       </Flex>
     </Box>
