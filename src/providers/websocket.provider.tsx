@@ -14,7 +14,9 @@ type WebSocketProvider = {
 const WebSocketContext = React.createContext({} as WebSocketProvider);
 
 export const WebSocketProvider = (children: ContainerProps) => {
-  const ws = useWebSocketManager("ws://localhost:8080/rest/ws");
+  const ws = useWebSocketManager(
+    `wss://${process.env.REACT_APP_SERVER_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/rest/ws`
+  );
 
   const value: WebSocketProvider = {
     sendMessage: (msg: WebSocketMessage) => {

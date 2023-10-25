@@ -21,6 +21,7 @@ import { Conversation } from "../types/conversation.type";
 import { User } from "../types/user.type";
 import { useWebSocket } from "../providers/websocket.provider";
 import {
+  WebSocketFriendRequestPayload,
   WebSocketMessage,
   WebSocketPrivateMessagePayload,
 } from "../types/websocket.type";
@@ -67,6 +68,7 @@ const AppContainer: React.FC = () => {
 
   const [conversation, setConversation] = useState<Conversation>();
   const [actualWritedMessage, setActualWritedMessage] = useState("");
+  const [friendInviteNickname, setFriendInviteNickname] = useState("");
 
   const changeConversation = (user: User) => {
     let c = conversationState.find(
@@ -102,6 +104,20 @@ const AppContainer: React.FC = () => {
     };
 
     sendMessage(webSocketMessage);
+  };
+
+  const sendFriendsRequest = () => {
+    const payload: WebSocketFriendRequestPayload = {
+      inviteSenderId: userState.actualUser?.id ?? "",
+      receiverNickname: friendInviteNickname,
+    };
+
+    const webSocketMessage: WebSocketMessage = {
+      actionType: "FRIENDS_REQUEST",
+      payload: payload,
+      sender: userState.actualUser?.id ?? "",
+      timestamp: new Date().toISOString(),
+    };
   };
 
   return (
@@ -164,17 +180,22 @@ const AppContainer: React.FC = () => {
           <>
             <Flex direction={"column"} gap={2} p={2}>
               <Flex direction={"column"}>
-                <Text fontWeight={"bold"}>AJOUTER UN AMIS qui est coule</Text>
+                <Text fontWeight={"bold"}>AJOUTER UN AMI</Text>
                 <Text fontSize={"sm"}>
-                  Tu peu ajouter des amis grâce à leurs pseudo Weaw
+                  Tu peux ajouter des amis grâce à leurs pseudo Weaw
                 </Text>
               </Flex>
-              <Input
-                placeholder="Pseudo"
-                variant="filled"
-                size="md"
-                onChange={(e) => setActualWritedMessage(e.target.value)}
-              />
+              <Flex gap={2}>
+                <Input
+                  placeholder="Pseudo"
+                  variant="filled"
+                  size="md"
+                  onChange={(e) => setFriendInviteNickname(e.target.value)}
+                />
+                <Button colorScheme="green" onClick={sendFriendsRequest}>
+                  Ajouter
+                </Button>
+              </Flex>
             </Flex>
 
             <VStack flex={1}>

@@ -1,4 +1,4 @@
-export type WebSocketMessageActionType = "PRIVATE_MESSAGE";
+export type WebSocketMessageActionType = "PRIVATE_MESSAGE" | "FRIENDS_REQUEST";
 
 export type WebSocketMessage = {
     actionType: WebSocketMessageActionType,
@@ -12,4 +12,9 @@ export type WebSocketPrivateMessagePayload = {
     conversationId: string,
     messageId?: string,
     message: string
+}
+
+export type WebSocketFriendRequestPayload = {
+    inviteSenderId: string,
+    receiverNickname: string
 }
