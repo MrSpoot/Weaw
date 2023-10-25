@@ -164,7 +164,7 @@ const AppContainer: React.FC = () => {
           <>
             <Flex direction={"column"} gap={2} p={2}>
               <Flex direction={"column"}>
-                <Text fontWeight={"bold"}>AJOUTER UN AMIS</Text>
+                <Text fontWeight={"bold"}>AJOUTER UN AMIS qui est coule</Text>
                 <Text fontSize={"sm"}>
                   Tu peu ajouter des amis grâce à leurs pseudo Weaw
                 </Text>
