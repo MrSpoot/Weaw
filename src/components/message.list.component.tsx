@@ -1,14 +1,10 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { FunctionComponent } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../reducer/slice/conversationSlice";
+import { loadMoreMessages } from "../reducer/thunk/conversation.tunk";
 import { RootState } from "../store";
 import MessageComponent from "./message.component";
-import { FixedSizeList as List } from "react-window";
-import InfiniteLoader from "react-window-infinite-loader";
-import { AppDispatch } from "../reducer/slice/conversationSlice";
-import LoaderComponent from "./loader.component";
-import { loadMoreMessages } from "../reducer/thunk/conversation.tunk";
-import messageService from "../services/message.service";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 const MessageListComponent: FunctionComponent<{ conversationId: string }> = ({
   conversationId,

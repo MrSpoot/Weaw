@@ -1,6 +1,6 @@
-import React, { FC, createContext, useContext, useState } from "react";
-import { useWebSocketManager } from "./hook/useWebSocketManager";
+import React from "react";
 import { WebSocketMessage } from "../types/websocket.type";
+import { useWebSocketManager } from "./hook/useWebSocketManager";
 
 type ContainerProps = {
   children: React.ReactNode;

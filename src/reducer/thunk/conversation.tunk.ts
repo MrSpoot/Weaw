@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '../../store';
 import messageService from '../../services/message.service';
+import { RootState } from '../../store';
 import { Conversation } from '../../types/conversation.type';
 
 export const loadMoreMessages = createAsyncThunk(

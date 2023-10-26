@@ -1,11 +1,6 @@
-import axios, { AxiosInstance } from "axios";
-import React, { ReactNode } from "react";
-import { createBrowserRouter, useNavigate } from "react-router-dom";
-import { JsxChild } from "typescript";
-import LoginContainer from "../containers/login.container";
-import NotFoundContainer from "../containers/not-found.container";
-import SplashContainer from "../containers/splash.container";
 import { ContainerProps } from "@chakra-ui/react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 type RouteProvider = { navigateTo: (route: string) => void };
 

@@ -1,12 +1,12 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { useRoute } from "../providers/route.provider";
-import LoaderComponent from "../components/loader.component";
 import { useDispatch } from "react-redux";
-import userService from "../services/user.service";
-import conversationService from "../services/conversation.service";
+import LoaderComponent from "../components/loader.component";
+import { useRoute } from "../providers/route.provider";
+import { AppDispatch } from "../reducer/slice/conversationSlice";
 import { setSocial, setUser } from "../reducer/slice/userSlice";
 import { fetchAndAddConversations } from "../reducer/thunk/conversation.tunk";
-import { AppDispatch } from "../reducer/slice/conversationSlice";
+import conversationService from "../services/conversation.service";
+import userService from "../services/user.service";
 
 const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
   children,

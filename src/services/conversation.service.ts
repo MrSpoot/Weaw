@@ -1,6 +1,5 @@
 import http from "../http-common";
 import { Conversation } from "../types/conversation.type";
-import { Login } from "../types/login.type";
 import { User } from "../types/user.type";
 
 const servicePath = "/conversations";

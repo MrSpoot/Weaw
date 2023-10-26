@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { WebSocketMessage } from '../../types/websocket.type';
-import { AppDispatch } from '../../reducer/slice/conversationSlice';
 import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../reducer/slice/conversationSlice';
+import { WebSocketMessage } from '../../types/websocket.type';
 
 export const useWebSocketManager = (url: string) => {
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);

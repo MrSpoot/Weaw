@@ -1,24 +1,16 @@
-import {
-  Avatar,
-  AvatarBadge,
-  Box,
-  Flex,
-  IconButton,
-  Text,
-} from "@chakra-ui/react";
-import { FunctionComponent, useState } from "react";
-import { User } from "../types/user.type";
-import { SocialRequest } from "../types/social.type";
 import { CheckIcon, CloseIcon, TimeIcon } from "@chakra-ui/icons";
-import CardComponent from "./card.component";
+import { Avatar, AvatarBadge, Flex, IconButton, Text } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { useWebSocket } from "../providers/websocket.provider";
+import { RootState } from "../store";
+import { SocialRequest } from "../types/social.type";
+import { User } from "../types/user.type";
 import {
   FriendResponseType,
   WebSocketFriendRequestResponsePayload,
   WebSocketMessage,
 } from "../types/websocket.type";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import { useWebSocket } from "../providers/websocket.provider";
+import CardComponent from "./card.component";
 
 const getStatus = (status: string) => {
   if (status === "online") {

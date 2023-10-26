@@ -1,9 +1,5 @@
 import http from "../http-common";
-import { Conversation } from "../types/conversation.type";
-import { Login } from "../types/login.type";
 import { MessageRequestDto } from "../types/message.request.dto.type";
-import { Message } from "../types/message.type";
-import { User } from "../types/user.type";
 
 const servicePath = "/message";
 

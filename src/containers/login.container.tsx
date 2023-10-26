@@ -1,33 +1,32 @@
-import { useEffect, useState } from "react";
-import { useRoute } from "../providers/route.provider";
+import { EmailIcon, InfoIcon, LockIcon, ViewIcon } from "@chakra-ui/icons";
 import {
+  Box,
+  Button,
   Center,
+  Checkbox,
   Flex,
+  FormControl,
+  HStack,
   Heading,
-  VStack,
+  Input,
   InputGroup,
   InputLeftElement,
-  Input,
-  Button,
-  Box,
-  Text,
+  InputRightElement,
   Progress,
-  Stepper,
   Step,
   StepIcon,
   StepIndicator,
   StepStatus,
+  Stepper,
+  Text,
+  VStack,
   useSteps,
-  InputRightElement,
-  FormControl,
-  Checkbox,
-  HStack,
 } from "@chakra-ui/react";
-import { EmailIcon, InfoIcon, LockIcon, ViewIcon } from "@chakra-ui/icons";
-import { User } from "../types/user.type";
-import loginService from "../services/login.service";
-import { Login } from "../types/login.type";
+import { useState } from "react";
+import { useRoute } from "../providers/route.provider";
 import { useWebSocket } from "../providers/websocket.provider";
+import loginService from "../services/login.service";
+import { User } from "../types/user.type";
 
 const LoginContainer = () => {
   const [isLogin, setIsLogin] = useState(true);

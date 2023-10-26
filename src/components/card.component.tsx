@@ -1,12 +1,4 @@
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import {
-  Avatar,
-  Box,
-  ContainerProps,
-  Flex,
-  IconButton,
-} from "@chakra-ui/react";
-import { request } from "http";
+import { Box } from "@chakra-ui/react";
 
 const CardComponent: React.FC<{
   children: React.ReactNode;

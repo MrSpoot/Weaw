@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
-import { Conversation } from "../types/conversation.type";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { Conversation } from "../types/conversation.type";
 
 const ConversationComponent: FunctionComponent<{
   conversation: Conversation;

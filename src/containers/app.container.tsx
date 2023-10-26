@@ -1,52 +1,35 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Flex,
-  Text,
-  Input,
   Button,
-  VStack,
-  Divider,
-  useStatStyles,
+  Flex,
   HStack,
-  Alert,
-  AlertIcon,
-  Stack,
-  InputRightElement,
-  InputGroup,
+  Input,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import UserCardComponent from "../components/user.card.component";
 import { useSelector } from "react-redux";
+import FriendCardComponent from "../components/friend.card.component";
+import FriendRequestCardComponent from "../components/friend.request.card.component";
+import UserActionComponent from "../components/user.action.component";
+import UserCardComponent from "../components/user.card.component";
+import { useWebSocket } from "../providers/websocket.provider";
+import conversationService from "../services/conversation.service";
 import { RootState } from "../store";
 import { Conversation } from "../types/conversation.type";
 import { User } from "../types/user.type";
-import { useWebSocket } from "../providers/websocket.provider";
 import {
   WebSocketFriendRequestPayload,
   WebSocketMessage,
   WebSocketPrivateMessagePayload,
 } from "../types/websocket.type";
-import conversationService from "../services/conversation.service";
-import UserActionComponent from "../components/user.action.component";
-import FriendCardComponent from "../components/friend.card.component";
-import FriendRequestCardComponent from "../components/friend.request.card.component";
 
 type pageType =
   | "FRIENDS_LIST"
   | "CONVERSATION"
   | "FRIENDS_REQUEST"
   | "ADD_FRIENDS";
-
-interface ChannelProps {
-  name: string;
-}
-
-const Channel: React.FC<ChannelProps> = ({ name }) => (
-  <Box py={2} px={4} _hover={{ bg: "gray.600", cursor: "pointer" }}>
-    #{name}
-  </Box>
-);
 
 interface MessageProps {
   author: string;

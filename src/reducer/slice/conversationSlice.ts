@@ -1,10 +1,10 @@
 
-import { createSlice, current, isAction, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import store from '../../store';
 import { Conversation } from '../../types/conversation.type';
 import { Message } from '../../types/message.type';
-import store from '../../store';
-import { fetchAndAddConversation, fetchAndAddConversations, loadMoreMessages } from '../thunk/conversation.tunk';
 import { WebSocketPrivateMessagePayload } from '../../types/websocket.type';
+import { fetchAndAddConversation, fetchAndAddConversations, loadMoreMessages } from '../thunk/conversation.tunk';
 
 interface ConversationsState {
     conversation: Conversation,

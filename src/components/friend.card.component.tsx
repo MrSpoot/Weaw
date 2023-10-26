@@ -1,5 +1,4 @@
-import { Avatar, AvatarBadge, Box, Flex, Text } from "@chakra-ui/react";
-import { FunctionComponent, useState } from "react";
+import { Avatar, AvatarBadge, Flex, Text } from "@chakra-ui/react";
 import { User } from "../types/user.type";
 import CardComponent from "./card.component";
 

@@ -1,8 +1,7 @@
 // conversationsSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Conversation } from '../../types/conversation.type';
-import { User } from '../../types/user.type';
 import { Social } from '../../types/social.type';
+import { User } from '../../types/user.type';
 
 interface UsersState {
     actualUser: User | undefined;

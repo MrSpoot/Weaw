@@ -1,17 +1,17 @@
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import reportWebVitals from "./reportWebVitals";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import NotFoundContainer from "./containers/not-found.container";
-import { RouteProvider } from "./providers/route.provider";
-import { Provider } from "react-redux";
-import store from "./store";
-import LoadingAppContainer from "./containers/loading.app.container";
 import { ChakraProvider } from "@chakra-ui/react";
-import LoginContainer from "./containers/login.container";
-import { ResponseProvider } from "./providers/response.provider";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppContainer from "./containers/app.container";
+import LoadingAppContainer from "./containers/loading.app.container";
+import LoginContainer from "./containers/login.container";
+import NotFoundContainer from "./containers/not-found.container";
+import "./index.css";
+import { ResponseProvider } from "./providers/response.provider";
+import { RouteProvider } from "./providers/route.provider";
 import { WebSocketProvider } from "./providers/websocket.provider";
+import reportWebVitals from "./reportWebVitals";
+import store from "./store";
 
 const router = createBrowserRouter([
   {
