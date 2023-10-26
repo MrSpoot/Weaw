@@ -5,10 +5,7 @@ import { JsxChild } from "typescript";
 import LoginContainer from "../containers/login.container";
 import NotFoundContainer from "../containers/not-found.container";
 import SplashContainer from "../containers/splash.container";
-
-type ContainerProps = {
-  children: React.ReactNode;
-};
+import { ContainerProps } from "@chakra-ui/react";
 
 type RouteProvider = { navigateTo: (route: string) => void };
 

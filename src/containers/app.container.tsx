@@ -12,6 +12,8 @@ import {
   Alert,
   AlertIcon,
   Stack,
+  InputRightElement,
+  InputGroup,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import UserCardComponent from "../components/user.card.component";
@@ -28,8 +30,13 @@ import {
 import conversationService from "../services/conversation.service";
 import UserActionComponent from "../components/user.action.component";
 import FriendCardComponent from "../components/friend.card.component";
+import FriendRequestCardComponent from "../components/friend.request.card.component";
 
-type pageType = "FRIENDS_LIST" | "CONVERSATION";
+type pageType =
+  | "FRIENDS_LIST"
+  | "CONVERSATION"
+  | "FRIENDS_REQUEST"
+  | "ADD_FRIENDS";
 
 interface ChannelProps {
   name: string;
@@ -79,6 +86,8 @@ const AppContainer: React.FC = () => {
         c.conversation.serverId === undefined
     )?.conversation;
 
+    setPageType("CONVERSATION");
+
     if (c) {
       setConversation(c);
     } else {
@@ -118,6 +127,8 @@ const AppContainer: React.FC = () => {
       sender: userState.actualUser?.id ?? "",
       timestamp: new Date().toISOString(),
     };
+
+    sendMessage(webSocketMessage);
   };
 
   return (
@@ -152,12 +163,6 @@ const AppContainer: React.FC = () => {
             p={2}
             gap={1}
           >
-            {userState.actualUser && (
-              <UserCardComponent
-                user={userState.actualUser}
-                onClick={() => {}}
-              />
-            )}
             {userState.social?.friends.map((u, index) => {
               return (
                 <UserCardComponent
@@ -175,10 +180,35 @@ const AppContainer: React.FC = () => {
             />
           )}
         </Flex>
+        <Flex direction={"column"} w={"100%"} gap={2} p={2}>
+          {pageType !== "CONVERSATION" && (
+            <Flex gap={2} mb={4}>
+              <Button
+                h={8}
+                onClick={() => setPageType("FRIENDS_LIST")}
+                colorScheme={"gray"}
+              >
+                En Ligne
+              </Button>
+              <Button
+                h={8}
+                onClick={() => setPageType("FRIENDS_REQUEST")}
+                colorScheme={"gray"}
+              >
+                En Attente
+              </Button>
+              <Button
+                h={8}
+                onClick={() => setPageType("ADD_FRIENDS")}
+                colorScheme="green"
+              >
+                Ajouter
+              </Button>
+            </Flex>
+          )}
 
-        {pageType === "FRIENDS_LIST" && (
-          <>
-            <Flex direction={"column"} gap={2} p={2}>
+          {pageType === "ADD_FRIENDS" && (
+            <>
               <Flex direction={"column"}>
                 <Text fontWeight={"bold"}>AJOUTER UN AMI</Text>
                 <Text fontSize={"sm"}>
@@ -189,59 +219,77 @@ const AppContainer: React.FC = () => {
                 <Input
                   placeholder="Pseudo"
                   variant="filled"
-                  size="md"
                   onChange={(e) => setFriendInviteNickname(e.target.value)}
                 />
                 <Button colorScheme="green" onClick={sendFriendsRequest}>
                   Ajouter
                 </Button>
               </Flex>
+            </>
+          )}
+
+          {pageType === "FRIENDS_REQUEST" && (
+            <Flex direction={"column"} gap={2} p={2}>
+              <VStack flex={1}>
+                <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
+                  {userState.social?.socialRequests.map((sr) => (
+                    <FriendRequestCardComponent
+                      request={sr}
+                      onClick={() => {}}
+                    />
+                  ))}
+                </Flex>
+              </VStack>
             </Flex>
+          )}
 
-            <VStack flex={1}>
-              <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
-                {userState.social?.friends.map((friends) => (
-                  <FriendCardComponent user={friends} onClick={() => {}} />
-                ))}
-              </Flex>
-            </VStack>
-          </>
-        )}
+          {pageType === "FRIENDS_LIST" && (
+            <>
+              <Flex direction={"column"} gap={2} p={2}></Flex>
 
-        {pageType === "CONVERSATION" && (
-          <VStack flex={1}>
-            <Flex
-              direction={"row"}
-              h="100vh"
-              overflowY="auto"
-              w={"full"}
-              px={4}
-            >
+              <VStack flex={1}>
+                <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
+                  {userState.social?.friends.map((friends) => (
+                    <FriendCardComponent user={friends} onClick={() => {}} />
+                  ))}
+                </Flex>
+              </VStack>
+            </>
+          )}
+
+          {pageType === "CONVERSATION" && (
+            <>
               <Flex
-                direction="column-reverse"
+                direction={"row"}
+                h="100vh"
                 overflowY="auto"
-                gap={2}
-                w={"100%"}
+                w={"full"}
+                px={4}
               >
-                <Message author="John" content="Hello, how are you?" />
-                <Message author="Doe" content="I'm fine, thank you!" />
+                <Flex
+                  direction="column-reverse"
+                  overflowY="auto"
+                  gap={2}
+                  w={"100%"}
+                >
+                  <Message author="John" content="Hello, how are you?" />
+                  <Message author="Doe" content="I'm fine, thank you!" />
+                </Flex>
               </Flex>
-            </Flex>
-
-            {/* Message Input */}
-            <HStack bg="gray.850" p={4} w={"100%"}>
-              <Input
-                placeholder="Type your message here..."
-                variant="filled"
-                size="lg"
-                onChange={(e) => setActualWritedMessage(e.target.value)}
-              />
-              <Button colorScheme="blue" onClick={_sendMessage}>
-                Send
-              </Button>
-            </HStack>
-          </VStack>
-        )}
+              <HStack bg="gray.850" p={4} w={"100%"}>
+                <Input
+                  placeholder="Type your message here..."
+                  variant="filled"
+                  size="lg"
+                  onChange={(e) => setActualWritedMessage(e.target.value)}
+                />
+                <Button colorScheme="blue" onClick={_sendMessage}>
+                  Send
+                </Button>
+              </HStack>
+            </>
+          )}
+        </Flex>
       </Flex>
     </Box>
   );

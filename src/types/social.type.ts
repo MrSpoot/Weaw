@@ -10,7 +10,8 @@ export type Social = {
 export type SocialRequest = {
     id: string,
     requestDirection: string,
-    user: User,
+    sender: User,
+    receiver: User,
     timestamp: number
 };
   

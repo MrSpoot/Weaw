@@ -42,7 +42,7 @@ const UserActionComponent: React.FC<{
         </Flex>
 
         <Flex gap={1}>
-          <SettingsIcon
+          {/* <SettingsIcon
             p={1}
             boxSize={7}
             color={"gray.500"}
@@ -55,7 +55,7 @@ const UserActionComponent: React.FC<{
             color={"gray.500"}
             _hover={{ bg: "blue.200" }}
             rounded={5}
-          />
+          /> */}
           <SettingsIcon
             p={1}
             boxSize={7}

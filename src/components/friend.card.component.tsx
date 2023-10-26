@@ -1,6 +1,7 @@
 import { Avatar, AvatarBadge, Box, Flex, Text } from "@chakra-ui/react";
 import { FunctionComponent, useState } from "react";
 import { User } from "../types/user.type";
+import CardComponent from "./card.component";
 
 const getStatus = (status: string) => {
   if (status === "online") {
@@ -28,7 +29,7 @@ const FriendCardComponent: React.FC<{
   };
 
   return (
-    <Box px={4} py={2} bg="blue.100" rounded={8} onClick={() => onClick(user)}>
+    <CardComponent onClick={() => onClick(user)}>
       <Flex gap={4}>
         <Avatar>{getStatus(handleRandomize())}</Avatar>
         <Flex direction={"column"}>
@@ -36,7 +37,7 @@ const FriendCardComponent: React.FC<{
           <Text fontSize={"sm"}>En ligne</Text>
         </Flex>
       </Flex>
-    </Box>
+    </CardComponent>
   );
 };
 
