@@ -1,15 +1,23 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../reducer/slice/conversationSlice';
-import { WebSocketMessage } from '../../types/websocket.type';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../reducer/slice/conversationSlice";
+import {
+  WebSocketFriendRequestResponsePayload,
+  WebSocketMessage,
+  WebSocketPrivateMessagePayload,
+} from "../../types/websocket.type";
+import {
+  addSocialRequest,
+  processSocialRequestResponse,
+  setSocial,
+} from "../../reducer/slice/userSlice";
+import { SocialRequest } from "../../types/social.type";
 
 export const useWebSocketManager = (url: string) => {
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);
-
   const dispatch = useDispatch<AppDispatch>();
-
   const connect = (token: string) => {
-    const ws = new WebSocket(url+"?token="+token);
+    const ws = new WebSocket(url + "?token=" + token);
 
     ws.onopen = (event) => {
       console.log("WebSocket ouvert:", event);
@@ -19,23 +27,37 @@ export const useWebSocketManager = (url: string) => {
     ws.onmessage = (event) => {
       const object: WebSocketMessage = JSON.parse(event.data);
 
-      switch (object.actionType){
+      switch (object.actionType) {
         case "PRIVATE_MESSAGE":
-          processPrivateMessageReception(object)
-          break
+          processPrivateMessageReception(object);
+          break;
+        case "FRIENDS_REQUEST":
+          processFriendMessageReception(object);
+          break;
+        case "FRIENDS_REQUEST_RESPONSE":
+          processFriendResponseMessageReception(object);
+          break;
       }
     };
 
     // Gérer d'autres événements du WebSocket selon vos besoins...
 
     setWebSocket(ws);
-  }
+  };
 
   const processPrivateMessageReception = (message: WebSocketMessage) => {
-    
-    
+    const payload = message.payload as WebSocketPrivateMessagePayload;
+  };
 
-  }
+  const processFriendMessageReception = (message: WebSocketMessage) => {
+    const payload = message.payload as SocialRequest;
+    dispatch(addSocialRequest(payload));
+  };
+
+  const processFriendResponseMessageReception = (message: WebSocketMessage) => {
+    const payload = message.payload as WebSocketFriendRequestResponsePayload;
+    dispatch(processSocialRequestResponse(payload));
+  };
 
   const sendMessage = (message: WebSocketMessage) => {
     websocket?.send(JSON.stringify(message));
@@ -44,6 +66,6 @@ export const useWebSocketManager = (url: string) => {
   return {
     websocket,
     sendMessage,
-    connect
+    connect,
   };
 };
