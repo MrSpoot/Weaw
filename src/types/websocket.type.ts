@@ -1,3 +1,4 @@
+import { Message } from "./message.type";
 import { User } from "./user.type";
 
 export type WebSocketMessageActionType =

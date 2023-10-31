@@ -25,7 +25,7 @@ import {
   WebSocketPrivateMessagePayload,
 } from "../types/websocket.type";
 
-type pageType =
+type PageType =
   | "FRIENDS_LIST"
   | "CONVERSATION"
   | "FRIENDS_REQUEST"
@@ -54,7 +54,7 @@ const AppContainer: React.FC = () => {
 
   const { sendMessage } = useWebSocket();
 
-  const [pageType, setPageType] = useState<pageType>("FRIENDS_LIST");
+  const [pageType, setPageType] = useState<PageType>("FRIENDS_LIST");
 
   const [conversation, setConversation] = useState<Conversation>();
   const [actualWritedMessage, setActualWritedMessage] = useState("");

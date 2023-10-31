@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../reducer/slice/conversationSlice";
+import {
+  AppDispatch,
+  addNewMessage,
+} from "../../reducer/slice/conversationSlice";
 import {
   WebSocketFriendRequestResponsePayload,
   WebSocketMessage,
-  WebSocketPrivateMessagePayload,
 } from "../../types/websocket.type";
 import {
   addSocialRequest,
   processSocialRequestResponse,
-  setSocial,
 } from "../../reducer/slice/userSlice";
 import { SocialRequest } from "../../types/social.type";
+import { Message } from "../../types/message.type";
 
 export const useWebSocketManager = (url: string) => {
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);
@@ -46,7 +48,8 @@ export const useWebSocketManager = (url: string) => {
   };
 
   const processPrivateMessageReception = (message: WebSocketMessage) => {
-    const payload = message.payload as WebSocketPrivateMessagePayload;
+    const payload = message.payload as Message;
+    dispatch(addNewMessage(payload));
   };
 
   const processFriendMessageReception = (message: WebSocketMessage) => {
