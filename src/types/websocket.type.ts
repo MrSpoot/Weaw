@@ -4,7 +4,8 @@ import { User } from "./user.type";
 export type WebSocketMessageActionType =
   | "PRIVATE_MESSAGE"
   | "FRIENDS_REQUEST"
-  | "FRIENDS_REQUEST_RESPONSE";
+  | "FRIENDS_REQUEST_RESPONSE"
+  | "PRIVATE_RESPONSE";
 
 export type WebSocketMessage = {
   actionType: WebSocketMessageActionType;

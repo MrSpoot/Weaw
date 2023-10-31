@@ -30,7 +30,7 @@ export const useWebSocketManager = (url: string) => {
       const object: WebSocketMessage = JSON.parse(event.data);
 
       switch (object.actionType) {
-        case "PRIVATE_MESSAGE":
+        case "PRIVATE_RESPONSE":
           processPrivateMessageReception(object);
           break;
         case "FRIENDS_REQUEST":
