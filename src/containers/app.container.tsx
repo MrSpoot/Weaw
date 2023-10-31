@@ -25,6 +25,11 @@ import {
   WebSocketPrivateMessagePayload,
 } from "../types/websocket.type";
 import MessageListComponent from "../components/message.list.component";
+import { useDispatch } from "react-redux";
+import {
+  AppDispatch,
+  addConversation,
+} from "../reducer/slice/conversationSlice";
 
 type PageType =
   | "FRIENDS_LIST"
@@ -48,6 +53,7 @@ const Message: React.FC<MessageProps> = ({ author, content }) => (
 );
 
 const AppContainer: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const userState = useSelector((state: RootState) => state.users);
   const conversationState = useSelector(
     (state: RootState) => state.conversations
@@ -64,10 +70,11 @@ const AppContainer: React.FC = () => {
   const changeConversation = (user: User) => {
     let c = conversationState.find(
       (c) =>
-        c.conversation.users.includes(user) &&
+        c.conversation.users.filter((u) => u.id === user.id).length > 0 &&
         userState.actualUser &&
-        c.conversation.users.includes(userState.actualUser) &&
-        c.conversation.serverId === undefined
+        c.conversation.users.filter((u) => u.id === userState.actualUser?.id)
+          .length > 0 &&
+        c.conversation.serverId === null
     )?.conversation;
 
     setPageType("CONVERSATION");
@@ -78,12 +85,14 @@ const AppContainer: React.FC = () => {
       userState.actualUser &&
         conversationService
           .createConversation([user, userState.actualUser])
-          .then((c) => setConversation(c));
+          .then((c) => {
+            setConversation(c);
+            dispatch(addConversation(c));
+          });
     }
   };
 
   const _sendMessage = () => {
-    console.log("ALOOOO");
     const payload: WebSocketPrivateMessagePayload = {
       senderId: userState.actualUser?.id ?? "",
       conversationId: conversation?.id ?? "",

@@ -25,10 +25,24 @@ const conversationsSlice = createSlice({
   initialState,
   reducers: {
     addNewMessage(state, action: PayloadAction<Message>) {
+      console.log("ALLO");
       const conversationState = state.find(
         (c) => c.conversation.id === action.payload.conversationId
       );
       conversationState && conversationState.messages.unshift(action.payload);
+    },
+    addConversation(state, action: PayloadAction<Conversation>) {
+      const _conversationState: ConversationsState = {
+        conversation: action.payload,
+        messages: [],
+        currentPage: 1,
+        totalPages: 1,
+        totalMessagesCount: 0,
+        isLoading: false,
+        hasMoreItems: false,
+      };
+
+      state.push(_conversationState);
     },
   },
   extraReducers: (builder) => {
@@ -74,6 +88,6 @@ const conversationsSlice = createSlice({
   },
 });
 
-export const { addNewMessage } = conversationsSlice.actions;
+export const { addNewMessage, addConversation } = conversationsSlice.actions;
 export default conversationsSlice.reducer;
 export type AppDispatch = typeof store.dispatch;

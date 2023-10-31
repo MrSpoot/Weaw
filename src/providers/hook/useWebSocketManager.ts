@@ -28,7 +28,7 @@ export const useWebSocketManager = (url: string) => {
 
     ws.onmessage = (event) => {
       const object: WebSocketMessage = JSON.parse(event.data);
-
+      console.log(object);
       switch (object.actionType) {
         case "PRIVATE_RESPONSE":
           processPrivateMessageReception(object);
