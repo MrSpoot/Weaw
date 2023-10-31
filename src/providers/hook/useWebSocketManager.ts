@@ -41,9 +41,6 @@ export const useWebSocketManager = (url: string) => {
           break;
       }
     };
-
-    // Gérer d'autres événements du WebSocket selon vos besoins...
-
     setWebSocket(ws);
   };
 

@@ -24,6 +24,7 @@ import {
   WebSocketMessage,
   WebSocketPrivateMessagePayload,
 } from "../types/websocket.type";
+import MessageListComponent from "../components/message.list.component";
 
 type PageType =
   | "FRIENDS_LIST"
@@ -82,6 +83,7 @@ const AppContainer: React.FC = () => {
   };
 
   const _sendMessage = () => {
+    console.log("ALOOOO");
     const payload: WebSocketPrivateMessagePayload = {
       senderId: userState.actualUser?.id ?? "",
       conversationId: conversation?.id ?? "",
@@ -255,8 +257,9 @@ const AppContainer: React.FC = () => {
                   gap={2}
                   w={"100%"}
                 >
-                  <Message author="John" content="Hello, how are you?" />
-                  <Message author="Doe" content="I'm fine, thank you!" />
+                  <MessageListComponent
+                    conversationId={conversation?.id ?? ""}
+                  />
                 </Flex>
               </Flex>
               <HStack bg="gray.850" p={4} w={"100%"}>
