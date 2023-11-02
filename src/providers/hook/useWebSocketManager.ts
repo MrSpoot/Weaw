@@ -31,7 +31,7 @@ export const useWebSocketManager = (url: string) => {
 
     ws.onclose = () => {
       console.log("Websocket fermé, tentative de reconnexion")
-      setTimeout(connect, 5000);
+      setTimeout(() => connect(token), 5000);
     }
 
     ws.onmessage = (event) => {
