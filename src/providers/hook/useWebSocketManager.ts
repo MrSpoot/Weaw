@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { setWebSocketConnectionState } from "../../reducer/slice/appSlice";
 import {
   AppDispatch,
   addNewMessage,
@@ -26,11 +27,13 @@ export const useWebSocketManager = (url: string) => {
 
     ws.onopen = (event) => {
       console.log("WebSocket ouvert:", event);
+      dispatch(setWebSocketConnectionState(true))
       setWebSocket(ws);
     };
 
     ws.onclose = () => {
       console.log("Websocket fermé, tentative de reconnexion")
+      dispatch(setWebSocketConnectionState(false))
       setTimeout(() => connect(token), 5000);
     }
 
