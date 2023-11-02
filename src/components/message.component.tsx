@@ -1,21 +1,21 @@
+import { Avatar, Flex, Text } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
 import { Message } from "../types/message.type";
+import CardComponent from "./card.component";
 
 const MessageComponent: FunctionComponent<{ message: Message }> = ({
   message,
 }) => {
-  const actualUser = useSelector((state: RootState) => state.users).actualUser;
-
   return (
-    <div
-      className={`flex ${
-        message.sender.id === actualUser?.id ? "bg-red-400" : "bg-green-400"
-      }  rounded-xl p-4`}
-    >
-      <div>{message.content}</div>
-    </div>
+    <CardComponent>
+      <Flex gap={2}>
+        <Avatar name={message.sender.nickname} />
+        <Flex direction={"column"}>
+          <Text>{message.sender.nickname}</Text>
+          <Text wordBreak={"break-word"}>{message.content}</Text>
+        </Flex>
+      </Flex>
+    </CardComponent>
   );
 };
 

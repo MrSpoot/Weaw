@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, Input } from "@chakra-ui/react";
+import { Button, Flex, HStack, Input, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import MessageListComponent from "../components/message.list.component";
@@ -36,23 +36,25 @@ const ConversationContainer: React.FC<{ conversation: Conversation }> = ({
 
   return (
     <>
-      <Flex direction={"row"} h="100vh" overflowY="auto" w={"full"} px={4}>
-        <Flex direction="column-reverse" overflowY="auto" gap={2} w={"100%"}>
-          <MessageListComponent conversationId={conversation?.id ?? ""} />
+      <VStack>
+        <Flex direction={"row"} h="100vh" overflowY="auto" w={"full"} px={4}>
+          <Flex direction="column-reverse" overflowY="auto" gap={2} w={"100%"}>
+            <MessageListComponent conversationId={conversation?.id ?? ""} />
+          </Flex>
         </Flex>
-      </Flex>
-      <HStack bg="gray.850" p={4} w={"100%"}>
-        <Input
-          placeholder="Type your message here..."
-          variant="filled"
-          size="lg"
-          value={actualWritedMessage}
-          onChange={(e) => setActualWritedMessage(e.target.value)}
-        />
-        <Button colorScheme="blue" onClick={_sendMessage}>
-          Send
-        </Button>
-      </HStack>
+        <HStack bg="gray.850" p={4} w={"100%"}>
+          <Input
+            placeholder="Type your message here..."
+            variant="filled"
+            size="lg"
+            value={actualWritedMessage}
+            onChange={(e) => setActualWritedMessage(e.target.value)}
+          />
+          <Button colorScheme="blue" onClick={_sendMessage}>
+            Send
+          </Button>
+        </HStack>
+      </VStack>
     </>
   );
 };
