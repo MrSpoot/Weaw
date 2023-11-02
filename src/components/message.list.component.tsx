@@ -1,6 +1,5 @@
 import { FunctionComponent, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../reducer/slice/conversationSlice";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import MessageComponent from "./message.component";
 

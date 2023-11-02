@@ -1,128 +1,29 @@
 import { AddIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Input,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import FriendCardComponent from "../components/friend.card.component";
-import FriendRequestCardComponent from "../components/friend.request.card.component";
+import ConversationCardComponent from "../components/conversation.card.component";
 import UserActionComponent from "../components/user.action.component";
-import UserCardComponent from "../components/user.card.component";
-import { useWebSocket } from "../providers/websocket.provider";
-import conversationService from "../services/conversation.service";
 import { RootState } from "../store";
 import { Conversation } from "../types/conversation.type";
-import { User } from "../types/user.type";
-import {
-  WebSocketFriendRequestPayload,
-  WebSocketMessage,
-  WebSocketPrivateMessagePayload,
-} from "../types/websocket.type";
-import MessageListComponent from "../components/message.list.component";
-import { useDispatch } from "react-redux";
-import {
-  AppDispatch,
-  addConversation,
-} from "../reducer/slice/conversationSlice";
+import ConversationContainer from "./conversation.container";
+import FriendsContainer from "./friends.container";
 
-type PageType =
-  | "FRIENDS_LIST"
-  | "CONVERSATION"
-  | "FRIENDS_REQUEST"
-  | "ADD_FRIENDS";
-
-interface MessageProps {
-  author: string;
-  content: string;
-}
-
-const Message: React.FC<MessageProps> = ({ author, content }) => (
-  <Flex direction="row" p={3} rounded={16} w="100%">
-    <Box w="40px" h="40px" borderRadius="full" bg="blue.500" mr={4} />
-    <VStack align="start" spacing={1}>
-      <Text fontWeight="bold">{author}</Text>
-      <Text>{content}</Text>
-    </VStack>
-  </Flex>
-);
+type PageType = "CONVERSATION" | "FRIENDS";
 
 const AppContainer: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const userState = useSelector((state: RootState) => state.users);
   const conversationState = useSelector(
     (state: RootState) => state.conversations
   );
 
-  const { sendMessage } = useWebSocket();
-
-  const [pageType, setPageType] = useState<PageType>("FRIENDS_LIST");
+  const [pageType, setPageType] = useState<PageType>("FRIENDS");
 
   const [conversation, setConversation] = useState<Conversation>();
-  const [actualWritedMessage, setActualWritedMessage] = useState("");
-  const [friendInviteNickname, setFriendInviteNickname] = useState("");
 
-  const changeConversation = (user: User) => {
-    let c = conversationState.find(
-      (c) =>
-        c.conversation.users.filter((u) => u.id === user.id).length > 0 &&
-        userState.actualUser &&
-        c.conversation.users.filter((u) => u.id === userState.actualUser?.id)
-          .length > 0 &&
-        c.conversation.serverId === null
-    )?.conversation;
-
+  const changeConversation = (conversation: Conversation) => {
+    setConversation(conversation);
     setPageType("CONVERSATION");
-
-    if (c) {
-      setConversation(c);
-    } else {
-      userState.actualUser &&
-        conversationService
-          .createConversation([user, userState.actualUser])
-          .then((c) => {
-            setConversation(c);
-            dispatch(addConversation(c));
-          });
-    }
-  };
-
-  const _sendMessage = () => {
-    const payload: WebSocketPrivateMessagePayload = {
-      senderId: userState.actualUser?.id ?? "",
-      conversationId: conversation?.id ?? "",
-      message: actualWritedMessage,
-    };
-
-    const webSocketMessage: WebSocketMessage = {
-      actionType: "PRIVATE_MESSAGE",
-      payload: payload,
-      sender: userState.actualUser?.id ?? "",
-      timestamp: new Date().toISOString(),
-    };
-
-    sendMessage(webSocketMessage);
-  };
-
-  const sendFriendsRequest = () => {
-    const payload: WebSocketFriendRequestPayload = {
-      inviteSenderId: userState.actualUser?.id ?? "",
-      receiverNickname: friendInviteNickname,
-    };
-
-    const webSocketMessage: WebSocketMessage = {
-      actionType: "FRIENDS_REQUEST",
-      payload: payload,
-      sender: userState.actualUser?.id ?? "",
-      timestamp: new Date().toISOString(),
-    };
-
-    sendMessage(webSocketMessage);
   };
 
   return (
@@ -157,13 +58,16 @@ const AppContainer: React.FC = () => {
             p={2}
             gap={1}
           >
-            {userState.social?.friends.map((u, index) => {
+            {conversationState.map((c, index) => {
               return (
-                <UserCardComponent
-                  key={index}
-                  user={u}
-                  onClick={changeConversation}
-                />
+                userState.actualUser && (
+                  <ConversationCardComponent
+                    key={index}
+                    conversation={c.conversation}
+                    actualUser={userState.actualUser}
+                    onClick={changeConversation}
+                  />
+                )
               );
             })}
           </Flex>
@@ -174,117 +78,10 @@ const AppContainer: React.FC = () => {
             />
           )}
         </Flex>
-        <Flex direction={"column"} w={"100%"} gap={2} p={2}>
-          {pageType !== "CONVERSATION" && (
-            <Flex gap={2} mb={4}>
-              <Button
-                h={8}
-                onClick={() => setPageType("FRIENDS_LIST")}
-                colorScheme={"gray"}
-              >
-                En Ligne
-              </Button>
-              <Button
-                h={8}
-                onClick={() => setPageType("FRIENDS_REQUEST")}
-                colorScheme={"gray"}
-              >
-                En Attente
-              </Button>
-              <Button
-                h={8}
-                onClick={() => setPageType("ADD_FRIENDS")}
-                colorScheme="green"
-              >
-                Ajouter
-              </Button>
-            </Flex>
-          )}
-
-          {pageType === "ADD_FRIENDS" && (
-            <>
-              <Flex direction={"column"}>
-                <Text fontWeight={"bold"}>AJOUTER UN AMI</Text>
-                <Text fontSize={"sm"}>
-                  Tu peux ajouter des amis grâce à leurs pseudo Weaw
-                </Text>
-              </Flex>
-              <Flex gap={2}>
-                <Input
-                  placeholder="Pseudo"
-                  variant="filled"
-                  onChange={(e) => setFriendInviteNickname(e.target.value)}
-                />
-                <Button colorScheme="green" onClick={sendFriendsRequest}>
-                  Ajouter
-                </Button>
-              </Flex>
-            </>
-          )}
-
-          {pageType === "FRIENDS_REQUEST" && (
-            <Flex direction={"column"} gap={2} p={2}>
-              <VStack flex={1}>
-                <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
-                  {userState.social?.socialRequests.map((sr) => (
-                    <FriendRequestCardComponent
-                      request={sr}
-                      onClick={() => {}}
-                    />
-                  ))}
-                </Flex>
-              </VStack>
-            </Flex>
-          )}
-
-          {pageType === "FRIENDS_LIST" && (
-            <>
-              <Flex direction={"column"} gap={2} p={2}></Flex>
-
-              <VStack flex={1}>
-                <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
-                  {userState.social?.friends.map((friends) => (
-                    <FriendCardComponent user={friends} onClick={() => {}} />
-                  ))}
-                </Flex>
-              </VStack>
-            </>
-          )}
-
-          {pageType === "CONVERSATION" && (
-            <>
-              <Flex
-                direction={"row"}
-                h="100vh"
-                overflowY="auto"
-                w={"full"}
-                px={4}
-              >
-                <Flex
-                  direction="column-reverse"
-                  overflowY="auto"
-                  gap={2}
-                  w={"100%"}
-                >
-                  <MessageListComponent
-                    conversationId={conversation?.id ?? ""}
-                  />
-                </Flex>
-              </Flex>
-              <HStack bg="gray.850" p={4} w={"100%"}>
-                <Input
-                  placeholder="Type your message here..."
-                  variant="filled"
-                  size="lg"
-                  onChange={(e) => setActualWritedMessage(e.target.value)}
-                />
-                <Button colorScheme="blue" onClick={_sendMessage}>
-                  Send
-                </Button>
-              </HStack>
-            </>
-          )}
-        </Flex>
+        {pageType === "CONVERSATION" && conversation && (
+          <ConversationContainer conversation={conversation} />
+        )}
+        {pageType === "FRIENDS" && <FriendsContainer />}
       </Flex>
     </Box>
   );

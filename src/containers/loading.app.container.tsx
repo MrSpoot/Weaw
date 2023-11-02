@@ -19,6 +19,7 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
   const dispatch = useDispatch<AppDispatch>();
 
   const appState = useSelector((state: RootState) => state.app);
+  const userState = useSelector((state: RootState) => state.users);
 
   const loadData = async () => {
     try {
@@ -41,7 +42,9 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
     loadData();
   }, []);
 
-  return isLoading || !!!appState.isWebSocketConnected ? (
+  return isLoading ||
+    !!!appState.isWebSocketConnected ||
+    !!!userState.actualUser ? (
     <div className="flex h-full w-full items-center justify-center">
       <LoaderComponent />
     </div>
