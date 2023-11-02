@@ -19,6 +19,9 @@ export const useWebSocketManager = (url: string) => {
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const connect = (token: string) => {
+    if(websocket && websocket.readyState === WebSocket.OPEN){
+      return
+    }
     const ws = new WebSocket(url + "?token=" + token);
 
     ws.onopen = (event) => {
