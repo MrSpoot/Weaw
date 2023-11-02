@@ -5,15 +5,15 @@ import {
   addNewMessage,
 } from "../../reducer/slice/conversationSlice";
 import {
-  WebSocketFriendRequestResponsePayload,
-  WebSocketMessage,
-} from "../../types/websocket.type";
-import {
   addSocialRequest,
   processSocialRequestResponse,
 } from "../../reducer/slice/userSlice";
-import { SocialRequest } from "../../types/social.type";
 import { Message } from "../../types/message.type";
+import { SocialRequest } from "../../types/social.type";
+import {
+  WebSocketFriendRequestResponsePayload,
+  WebSocketMessage,
+} from "../../types/websocket.type";
 
 export const useWebSocketManager = (url: string) => {
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);
@@ -25,6 +25,11 @@ export const useWebSocketManager = (url: string) => {
       console.log("WebSocket ouvert:", event);
       setWebSocket(ws);
     };
+
+    ws.onclose = () => {
+      console.log("Websocket fermé, tentative de reconnexion")
+      setTimeout(connect, 5000);
+    }
 
     ws.onmessage = (event) => {
       const object: WebSocketMessage = JSON.parse(event.data);
