@@ -29,8 +29,8 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
     const token = Cookies.get("userToken");
     if (token) {
       http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      connect(token);
     }
+
     try {
       const u = await userService.getUser();
       dispatch(setUser(u));
@@ -40,11 +40,13 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
 
       const c = await conversationService.getUserConversations();
       dispatch(fetchAndAddConversations(c));
+
+      token && connect(token);
+      navigateTo("app");
     } catch (error: any) {
       navigateTo("auth");
       setIsLoading(false);
     } finally {
-      navigateTo("app");
       setIsLoading(false);
     }
   };
