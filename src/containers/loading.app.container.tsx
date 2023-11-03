@@ -43,6 +43,7 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
     } catch (error: any) {
       navigateTo("auth");
     } finally {
+      navigateTo("app");
       setIsLoading(false);
     }
   };
