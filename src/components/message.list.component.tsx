@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import MessageComponent from "./message.component";
@@ -11,10 +11,6 @@ const MessageListComponent: FunctionComponent<{ conversationId: string }> = ({
   const conversation = conversations.find(
     (c) => c.conversation.id === conversationId
   );
-
-  useEffect(() => {
-    console.log(conversationId);
-  }, [conversationId]);
 
   return (
     <>
