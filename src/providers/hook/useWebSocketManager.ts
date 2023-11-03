@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setWebSocketConnectionState } from "../../reducer/slice/appSlice";
 import {
   AppDispatch,
+  addConversation,
   addNewMessage,
 } from "../../reducer/slice/conversationSlice";
 import {
@@ -15,27 +16,32 @@ import {
   WebSocketFriendRequestResponsePayload,
   WebSocketMessage,
 } from "../../types/websocket.type";
+import { RootState } from "../../store";
+import conversationService from "../../services/conversation.service";
 
 export const useWebSocketManager = (url: string) => {
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const conversationState = useSelector(
+    (state: RootState) => state.conversations
+  );
   const connect = (token: string) => {
-    if(websocket && websocket.readyState === WebSocket.OPEN){
-      return
+    if (websocket && websocket.readyState === WebSocket.OPEN) {
+      return;
     }
     const ws = new WebSocket(url + "?token=" + token);
 
     ws.onopen = (event) => {
       console.log("WebSocket ouvert:", event);
-      dispatch(setWebSocketConnectionState(true))
+      dispatch(setWebSocketConnectionState(true));
       setWebSocket(ws);
     };
 
     ws.onclose = () => {
-      console.log("Websocket fermé, tentative de reconnexion")
-      dispatch(setWebSocketConnectionState(false))
+      console.log("Websocket fermé, tentative de reconnexion");
+      dispatch(setWebSocketConnectionState(false));
       setTimeout(() => connect(token), 5000);
-    }
+    };
 
     ws.onmessage = (event) => {
       const object: WebSocketMessage = JSON.parse(event.data);
@@ -55,9 +61,24 @@ export const useWebSocketManager = (url: string) => {
     setWebSocket(ws);
   };
 
-  const processPrivateMessageReception = (message: WebSocketMessage) => {
+  const processPrivateMessageReception = async (message: WebSocketMessage) => {
     const payload = message.payload as Message;
-    dispatch(addNewMessage(payload));
+
+    if (
+      conversationState.filter(
+        (cst) => cst.conversation.id === payload.conversationId
+      ).length <= 0
+    ) {
+      const c = await conversationService.getUserConversation(
+        payload.conversationId
+      );
+      if (c) {
+        dispatch(addConversation(c));
+        dispatch(addNewMessage(payload));
+      }
+    } else {
+      dispatch(addNewMessage(payload));
+    }
   };
 
   const processFriendMessageReception = (message: WebSocketMessage) => {

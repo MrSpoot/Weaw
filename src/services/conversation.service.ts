@@ -10,15 +10,22 @@ const getUserConversations = (): Promise<Conversation[]> => {
   });
 };
 
-const createConversation = (users: User[]): Promise<Conversation> => {
-  return http.post(servicePath, {users: users}).then((res: any) => {
+const getUserConversation = (conversationId: string): Promise<Conversation> => {
+  return http.get(`${servicePath}/${conversationId}`).then((res: any) => {
     return res.data;
   });
-}
+};
+
+const createConversation = (users: User[]): Promise<Conversation> => {
+  return http.post(servicePath, { users: users }).then((res: any) => {
+    return res.data;
+  });
+};
 
 const conversationService = {
   getUserConversations,
-  createConversation
+  getUserConversation,
+  createConversation,
 };
 
 export default conversationService;
