@@ -1,12 +1,13 @@
 import http from "../http-common";
 import { Login } from "../types/login.type";
 import { User } from "../types/user.type";
+import Cookies from "js-cookie";
 
 const servicePath = "/auth";
 
-const login = (login: Login) : Promise<string> => {
+const login = (login: Login): Promise<string> => {
   return http.post(servicePath + "/signin", login).then((res: any) => {
-    http.defaults.headers.common['Authorization'] = `Bearer ${res.data}`
+    http.defaults.headers.common["Authorization"] = `Bearer ${res.data}`;
     return res.data;
   });
 };

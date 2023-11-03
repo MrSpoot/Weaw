@@ -27,6 +27,7 @@ import { useRoute } from "../providers/route.provider";
 import { useWebSocket } from "../providers/websocket.provider";
 import loginService from "../services/login.service";
 import { User } from "../types/user.type";
+import Cookies from "js-cookie";
 
 const LoginContainer = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -49,6 +50,7 @@ const LoginContainer = () => {
 const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
   const [login, setLogin] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [rememberMe, setRememberMe] = useState(false);
 
   const { navigateTo } = useRoute();
   const { connect } = useWebSocket();
@@ -87,7 +89,12 @@ const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
         </VStack>
         <Box gap={6}>
           <HStack justify="space-between" mb={4}>
-            <Checkbox defaultChecked>Remember me</Checkbox>
+            <Checkbox
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            >
+              Remember me
+            </Checkbox>
             <Button variant="text" color={"blue.500"} size="sm">
               Forgot password?
             </Button>
@@ -104,6 +111,15 @@ const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
                 loginService
                   .login({ login: login, password: password })
                   .then((token) => {
+                    if (rememberMe) {
+                      Cookies.set("userToken", token, {
+                        expires: 21,
+                        secure: true,
+                        sameSite: "strict",
+                      });
+                    } else {
+                      Cookies.remove("userToken");
+                    }
                     connect(token);
                   })
                   .then(() => navigateTo("app"));

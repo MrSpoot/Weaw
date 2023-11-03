@@ -4,13 +4,14 @@ import {
   Flex,
   HStack,
   Icon,
+  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
   InputRightElement,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import MessageListComponent from "../components/message.list.component";
 import { useWebSocket } from "../providers/websocket.provider";
@@ -23,10 +24,12 @@ import {
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { PhoneIcon, StarIcon } from "@chakra-ui/icons";
+import { EmojiIcon } from "../components/icon.components";
 
 const ConversationContainer: React.FC<{ conversation: Conversation }> = ({
   conversation,
 }) => {
+  const emojiPickerRef = useRef(null as HTMLDivElement | null);
   const [actualWritedMessage, setActualWritedMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const userState = useSelector((state: RootState) => state.users);
@@ -38,6 +41,23 @@ const ConversationContainer: React.FC<{ conversation: Conversation }> = ({
       _sendMessage();
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false); // Cacher le picker si le clic est en dehors
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const _sendMessage = () => {
     if (actualWritedMessage.length > 0) {
@@ -66,43 +86,42 @@ const ConversationContainer: React.FC<{ conversation: Conversation }> = ({
             <MessageListComponent conversationId={conversation?.id ?? ""} />
           </Flex>
         </Flex>
-        <HStack bg="gray.850" p={4} w={"100%"}>
-          <InputGroup>
-            <Input
-              placeholder="Type your message here..."
-              variant="filled"
-              size="lg"
-              value={actualWritedMessage}
-              onChange={(e) => setActualWritedMessage(e.target.value)}
-              onKeyDown={handleKeyPress}
-            />
-            <InputRightElement
-              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+        <HStack bg="gray.850" p={4} w={"100%"} gap={2}>
+          <Input
+            placeholder="Type your message here..."
+            variant="filled"
+            size="lg"
+            value={actualWritedMessage}
+            onChange={(e) => setActualWritedMessage(e.target.value)}
+            onKeyDown={handleKeyPress}
+          />
+          {showEmojiPicker && (
+            <Box
+              position={"absolute"}
+              bottom={"75px"}
+              right={"50px"}
+              zIndex={10}
+              ref={emojiPickerRef}
             >
-              <StarIcon color="gray.300" position={"absolute"} />
-              {showEmojiPicker && (
-                <Box
-                  bottom={250}
-                  left={"-150%"}
-                  position={"relative"}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <Picker
-                    onEmojiSelect={(e: any) => {
-                      setActualWritedMessage(
-                        actualWritedMessage.concat(e.native)
-                      );
-                      setShowEmojiPicker(!showEmojiPicker);
-                    }}
-                    perLine={6}
-                    emojiSize={24}
-                  />
-                </Box>
-              )}
-            </InputRightElement>
-          </InputGroup>
+              <Picker
+                onEmojiSelect={(e: any) => {
+                  setActualWritedMessage(actualWritedMessage.concat(e.native));
+                  setShowEmojiPicker(!showEmojiPicker);
+                }}
+                perLine={6}
+                emojiSize={24}
+              />
+            </Box>
+          )}
+
+          <Flex>
+            <EmojiIcon
+              color="gray.400"
+              boxSize={6}
+              mx={2}
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            ></EmojiIcon>
+          </Flex>
           <Button colorScheme="blue" onClick={_sendMessage}>
             Send
           </Button>

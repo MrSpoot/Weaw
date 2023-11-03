@@ -8,13 +8,17 @@ import { fetchAndAddConversations } from "../reducer/thunk/conversation.tunk";
 import conversationService from "../services/conversation.service";
 import userService from "../services/user.service";
 import { RootState } from "../store";
+import { useWebSocket } from "../providers/websocket.provider";
+import http from "../http-common";
+import Cookies from "js-cookie";
 
 const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
   children,
 }) => {
   const { navigateTo } = useRoute();
-
   const [isLoading, setIsLoading] = useState(true);
+
+  const { connect } = useWebSocket();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -22,6 +26,11 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
   const userState = useSelector((state: RootState) => state.users);
 
   const loadData = async () => {
+    const token = Cookies.get("userToken");
+    if (token) {
+      http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      connect(token);
+    }
     try {
       const u = await userService.getUser();
       dispatch(setUser(u));
