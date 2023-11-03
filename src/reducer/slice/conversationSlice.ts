@@ -32,17 +32,22 @@ const conversationsSlice = createSlice({
       conversationState && conversationState.messages.unshift(action.payload);
     },
     addConversation(state, action: PayloadAction<Conversation>) {
-      const _conversationState: ConversationsState = {
-        conversation: action.payload,
-        messages: [],
-        currentPage: 1,
-        totalPages: 1,
-        totalMessagesCount: 0,
-        isLoading: false,
-        hasMoreItems: false,
-      };
+      if (
+        state.filter((cst) => cst.conversation.id === action.payload.id)
+          .length === 0
+      ) {
+        const _conversationState: ConversationsState = {
+          conversation: action.payload,
+          messages: [],
+          currentPage: 1,
+          totalPages: 1,
+          totalMessagesCount: 0,
+          isLoading: false,
+          hasMoreItems: false,
+        };
 
-      state.push(_conversationState);
+        state.push(_conversationState);
+      }
     },
   },
   extraReducers: (builder) => {

@@ -1,5 +1,5 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, VStack } from "@chakra-ui/react";
+import { AddIcon, StarIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex, Icon, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import ConversationCardComponent from "../components/conversation.card.component";
@@ -58,6 +58,15 @@ const AppContainer: React.FC = () => {
             p={2}
             gap={1}
           >
+            <Button
+              justifyContent={"start"}
+              gap={2}
+              textColor={"gray.500"}
+              leftIcon={<StarIcon color={"gray.500"} />}
+              onClick={() => setPageType("FRIENDS")}
+            >
+              Amis
+            </Button>
             {conversationState.map((c, index) => {
               return (
                 userState.actualUser && (
