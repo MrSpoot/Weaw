@@ -42,6 +42,7 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
       dispatch(fetchAndAddConversations(c));
     } catch (error: any) {
       navigateTo("auth");
+      setIsLoading(false);
     } finally {
       navigateTo("app");
       setIsLoading(false);
