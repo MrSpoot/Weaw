@@ -9,33 +9,37 @@
 }
 
 /* width */
-::-webkit-scrollbar { 
+::-webkit-scrollbar {
   width: 8px;
-} 
+}
 
 /* Track */
-::-webkit-scrollbar-track { 
+::-webkit-scrollbar-track {
   background: #f1f1f1;
-} 
+}
 
 /* Handle */
-::-webkit-scrollbar-thumb { 
-  background: #888; 
+::-webkit-scrollbar-thumb {
+  background: #888;
   border-radius: 4px;
-} 
+}
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover { 
-  background: #555; 
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 /* CSS FOR LOADER */
 .custom-loader {
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:conic-gradient(#0000 10%,#192BC2);
-  -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
-  animation:s3 1s infinite linear;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: conic-gradient(#0000 10%, #192bc2);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+  animation: s3 1s infinite linear;
 }
-@keyframes s3 {to{transform: rotate(1turn)}}
+@keyframes s3 {
+  to {
+    transform: rotate(1turn);
+  }
+}

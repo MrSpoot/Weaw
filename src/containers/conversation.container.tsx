@@ -1,4 +1,15 @@
-import { Button, Flex, HStack, Input, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  VStack,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import MessageListComponent from "../components/message.list.component";
@@ -9,11 +20,15 @@ import {
   WebSocketMessage,
   WebSocketPrivateMessagePayload,
 } from "../types/websocket.type";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import { PhoneIcon, StarIcon } from "@chakra-ui/icons";
 
 const ConversationContainer: React.FC<{ conversation: Conversation }> = ({
   conversation,
 }) => {
   const [actualWritedMessage, setActualWritedMessage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const userState = useSelector((state: RootState) => state.users);
   const { sendMessage } = useWebSocket();
 
@@ -52,14 +67,42 @@ const ConversationContainer: React.FC<{ conversation: Conversation }> = ({
           </Flex>
         </Flex>
         <HStack bg="gray.850" p={4} w={"100%"}>
-          <Input
-            placeholder="Type your message here..."
-            variant="filled"
-            size="lg"
-            value={actualWritedMessage}
-            onChange={(e) => setActualWritedMessage(e.target.value)}
-            onKeyDown={handleKeyPress}
-          />
+          <InputGroup>
+            <Input
+              placeholder="Type your message here..."
+              variant="filled"
+              size="lg"
+              value={actualWritedMessage}
+              onChange={(e) => setActualWritedMessage(e.target.value)}
+              onKeyDown={handleKeyPress}
+            />
+            <InputRightElement
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            >
+              <StarIcon color="gray.300" position={"absolute"} />
+              {showEmojiPicker && (
+                <Box
+                  bottom={250}
+                  left={"-150%"}
+                  position={"relative"}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <Picker
+                    onEmojiSelect={(e: any) => {
+                      setActualWritedMessage(
+                        actualWritedMessage.concat(e.native)
+                      );
+                      setShowEmojiPicker(!showEmojiPicker);
+                    }}
+                    perLine={6}
+                    emojiSize={24}
+                  />
+                </Box>
+              )}
+            </InputRightElement>
+          </InputGroup>
           <Button colorScheme="blue" onClick={_sendMessage}>
             Send
           </Button>
