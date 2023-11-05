@@ -6,7 +6,7 @@ import { RootState } from "../store";
 import { SocialRequest } from "../types/social.type";
 import { User } from "../types/user.type";
 import {
-  FriendResponseType,
+  ResponseType,
   WebSocketFriendRequestResponsePayload,
   WebSocketMessage,
 } from "../types/websocket.type";
@@ -36,7 +36,7 @@ const FriendRequestCardComponent: React.FC<{
 
   const { sendMessage } = useWebSocket();
 
-  const sendFriendsRequestResponse = (response: FriendResponseType) => {
+  const sendFriendsRequestResponse = (response: ResponseType) => {
     const payload: WebSocketFriendRequestResponsePayload = {
       socialRequestId: request.id,
       response: response,

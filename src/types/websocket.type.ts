@@ -1,4 +1,3 @@
-import { Message } from "./message.type";
 import { User } from "./user.type";
 
 export type WebSocketMessageActionType =
@@ -21,14 +20,23 @@ export type WebSocketPrivateMessagePayload = {
   message: string;
 };
 
+export type WebSocketCallPayload = {
+  sender: User;
+  receiverId: string;
+};
+
+export type WebSocketCallResponsePayload = {
+  response: ResponseType;
+};
+
 export type WebSocketFriendRequestPayload = {
   inviteSenderId: string;
   receiverNickname: string;
 };
 
-export type FriendResponseType = "ACCEPTED" | "REJECTED";
+export type ResponseType = "ACCEPTED" | "REJECTED";
 
 export type WebSocketFriendRequestResponsePayload = {
   socialRequestId: string;
-  response: FriendResponseType;
+  response: ResponseType;
 };

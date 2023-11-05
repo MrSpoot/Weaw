@@ -9,6 +9,8 @@ import {
   AppDispatch,
   addConversation,
 } from "../reducer/slice/conversationSlice";
+import { PhoneIcon } from "./icon.components";
+import { setCall } from "../reducer/slice/callSlice.ts";
 
 const getStatus = (status: string) => {
   if (status === "online") {
@@ -48,6 +50,10 @@ const FriendCardComponent: React.FC<{
     }
   };
 
+  const callUser = () => {
+    dispatch(setCall(true));
+  };
+
   return (
     <CardComponent onClick={() => onClick(user)}>
       <Flex
@@ -68,6 +74,12 @@ const FriendCardComponent: React.FC<{
             icon={<ChatIcon />}
             aria-label={"Send message"}
             onClick={createConversation}
+          />
+          <IconButton
+            colorScheme={"green"}
+            icon={<PhoneIcon />}
+            aria-label={"Call"}
+            onClick={callUser}
           />
           <IconButton
             colorScheme={"red"}

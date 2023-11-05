@@ -1,4 +1,4 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -12,6 +12,7 @@ import { RouteProvider } from "./providers/route.provider";
 import { WebSocketProvider } from "./providers/websocket.provider";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
+import { theme } from "./theme";
 
 const router = createBrowserRouter([
   {
