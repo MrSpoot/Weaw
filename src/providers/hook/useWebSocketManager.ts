@@ -60,6 +60,9 @@ export const useWebSocketManager = (url: string) => {
         case "FRIENDS_REQUEST_RESPONSE":
           processFriendResponseMessageReception(object);
           break;
+          case "CALL":
+            processCallRequestReception(object);
+          break;
       }
     };
     setWebSocket(ws);
@@ -88,6 +91,49 @@ export const useWebSocketManager = (url: string) => {
   const processFriendMessageReception = (message: WebSocketMessage) => {
     const payload = message.payload as SocialRequest;
     dispatch(addSocialRequest(payload));
+  };
+
+  const processCallRequestReception = async (message: WebSocketMessage) => {
+    const payload = message.payload as WebSocketCallPayload;
+    if(userState.actualUser){
+      if(payload.webRTCMessage.type === "offer"){
+        const sessionDescription = new RTCSessionDescription({ type: payload.webRTCMessage.type as RTCSdpType, sdp: payload.webRTCMessage.sdp });
+  
+        const peerConnection = new RTCPeerConnection();
+    
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        stream.getTracks().forEach((track) => {
+          peerConnection.addTrack(track, stream);
+        });
+    
+        // Définissez l'offre sur la connexion
+        await peerConnection.setRemoteDescription(sessionDescription);
+    
+        // Créez une réponse
+        const answer = await peerConnection.createAnswer();
+    
+        // Définissez la réponse localement
+        await peerConnection.setLocalDescription(answer);
+    
+        const callPayload: WebSocketCallPayload = {
+          sender: userState.actualUser,
+          receiverId: payload.sender.id ?? "",
+          webRTCMessage: {
+            type: answer.type,
+            sdp: answer.sdp ?? "",
+          }
+        };
+        const webSocketMessage: WebSocketMessage = {
+          actionType: "CALL",
+          payload: callPayload,
+          sender: userState.actualUser?.id ?? "",
+          timestamp: new Date().toISOString(),
+        };
+        sendMessage(webSocketMessage)
+      }else{
+
+      }
+    }
   };
 
   const processFriendResponseMessageReception = (message: WebSocketMessage) => {
