@@ -10,20 +10,24 @@ import {
   addSocialRequest,
   processSocialRequestResponse,
 } from "../../reducer/slice/userSlice";
+import conversationService from "../../services/conversation.service";
+import { RootState } from "../../store";
 import { Message } from "../../types/message.type";
 import { SocialRequest } from "../../types/social.type";
 import {
+  WebSocketCallPayload,
   WebSocketFriendRequestResponsePayload,
   WebSocketMessage,
 } from "../../types/websocket.type";
-import { RootState } from "../../store";
-import conversationService from "../../services/conversation.service";
 
 export const useWebSocketManager = (url: string) => {
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const conversationState = useSelector(
     (state: RootState) => state.conversations
+  );
+  const userState = useSelector(
+    (state: RootState) => state.users
   );
   const connect = (token: string) => {
     if (websocket && websocket.readyState === WebSocket.OPEN) {
@@ -95,9 +99,47 @@ export const useWebSocketManager = (url: string) => {
     websocket?.send(JSON.stringify(message));
   };
 
+  const startCall = async (userId: string) => {
+    try {
+      if(userState.actualUser){
+
+      // Créez une instance de RTCPeerConnection
+      const peerConnection = new RTCPeerConnection();
+
+      // Ajoutez des flux (vidéo et audio)
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      stream.getTracks().forEach((track) => {
+        peerConnection.addTrack(track, stream);
+      });
+
+      // Créez une offre
+      const offer = await peerConnection.createOffer();
+      await peerConnection.setLocalDescription(offer);
+      const callPayload: WebSocketCallPayload = {
+        sender: userState.actualUser,
+        receiverId: userId,
+        webRTCMessage: {
+          type: offer.type,
+          sdp: offer.sdp ?? "",
+        }
+      };
+      const webSocketMessage: WebSocketMessage = {
+        actionType: "CALL",
+        payload: callPayload,
+        sender: userState.actualUser?.id ?? "",
+        timestamp: new Date().toISOString(),
+      };
+      sendMessage(webSocketMessage)
+    }
+    } catch (error) {
+      console.error("Erreur lors de la demande d'accès à la caméra et au microphone :", error);
+    }
+  }
+
   return {
     websocket,
     sendMessage,
     connect,
+    startCall
   };
 };

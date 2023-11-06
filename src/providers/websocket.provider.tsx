@@ -9,10 +9,12 @@ type ContainerProps = {
 type WebSocketProvider = {
   sendMessage: (msg: WebSocketMessage) => void;
   connect: (token: string) => void;
+  startCall: (userId: string) => void;
 };
 
 const WebSocketContext = React.createContext({} as WebSocketProvider);
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const WebSocketProvider = (children: ContainerProps) => {
   const ws = useWebSocketManager(
     `wss://${process.env.REACT_APP_SERVER_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/rest/ws`
@@ -24,6 +26,9 @@ export const WebSocketProvider = (children: ContainerProps) => {
     },
     connect: (token: string) => {
       ws.connect(token);
+    },
+    startCall: (userId: string) => {
+      ws.startCall(userId);
     },
   };
 

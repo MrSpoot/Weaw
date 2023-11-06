@@ -1,18 +1,8 @@
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Icon,
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Input, VStack } from "@chakra-ui/react";
+import Picker from "@emoji-mart/react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { EmojiIcon } from "../components/icon.components";
 import MessageListComponent from "../components/message.list.component";
 import { useWebSocket } from "../providers/websocket.provider";
 import { RootState } from "../store";
@@ -21,10 +11,6 @@ import {
   WebSocketMessage,
   WebSocketPrivateMessagePayload,
 } from "../types/websocket.type";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
-import { PhoneIcon, StarIcon } from "@chakra-ui/icons";
-import { EmojiIcon } from "../components/icon.components";
 
 const ConversationContainer: React.FC<{ conversation: Conversation }> = ({
   conversation,

@@ -1,16 +1,16 @@
-import { Avatar, AvatarBadge, Flex, IconButton, Text } from "@chakra-ui/react";
-import { User } from "../types/user.type";
-import CardComponent from "./card.component";
 import { ChatIcon, DeleteIcon } from "@chakra-ui/icons";
+import { Avatar, AvatarBadge, Flex, IconButton, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import conversationService from "../services/conversation.service";
+import { useWebSocket } from "../providers/websocket.provider";
 import {
   AppDispatch,
   addConversation,
 } from "../reducer/slice/conversationSlice";
+import conversationService from "../services/conversation.service";
+import { RootState } from "../store";
+import { User } from "../types/user.type";
+import CardComponent from "./card.component";
 import { PhoneIcon } from "./icon.components";
-import { setCall } from "../reducer/slice/callSlice.ts";
 
 const getStatus = (status: string) => {
   if (status === "online") {
@@ -31,7 +31,7 @@ const FriendCardComponent: React.FC<{
   onClick: (user: User) => void;
 }> = ({ user, onClick }) => {
   const phrases: string[] = ["online", "red", "absent", "disconnect"];
-
+  const { startCall } = useWebSocket();
   const userState = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -48,10 +48,6 @@ const FriendCardComponent: React.FC<{
           dispatch(addConversation(c));
         });
     }
-  };
-
-  const callUser = () => {
-    dispatch(setCall(true));
   };
 
   return (
@@ -79,7 +75,7 @@ const FriendCardComponent: React.FC<{
             colorScheme={"green"}
             icon={<PhoneIcon />}
             aria-label={"Call"}
-            onClick={callUser}
+            onClick={() => startCall(user.id ?? "")}
           />
           <IconButton
             colorScheme={"red"}

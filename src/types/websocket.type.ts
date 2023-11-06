@@ -4,7 +4,8 @@ export type WebSocketMessageActionType =
   | "PRIVATE_MESSAGE"
   | "FRIENDS_REQUEST"
   | "FRIENDS_REQUEST_RESPONSE"
-  | "PRIVATE_RESPONSE";
+  | "PRIVATE_RESPONSE"
+  | "CALL";
 
 export type WebSocketMessage = {
   actionType: WebSocketMessageActionType;
@@ -23,7 +24,15 @@ export type WebSocketPrivateMessagePayload = {
 export type WebSocketCallPayload = {
   sender: User;
   receiverId: string;
+  webRTCMessage: WebRTCMessage;
+
 };
+
+export type WebRTCMessage = {
+  type: string;
+  sdp : string;
+  iceCandidates?: { [key: string]: string };
+}
 
 export type WebSocketCallResponsePayload = {
   response: ResponseType;
