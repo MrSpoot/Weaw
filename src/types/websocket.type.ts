@@ -1,4 +1,4 @@
-import { User } from "./user.type";
+import { Conversation } from "./conversation.type";
 
 export type WebSocketMessageActionType =
   | "PRIVATE_MESSAGE"
@@ -22,8 +22,7 @@ export type WebSocketPrivateMessagePayload = {
 };
 
 export type WebSocketCallPayload = {
-  sender: User;
-  receiverId: string;
+  conversation: Conversation;
   webRTCMessage: WebRTCMessage;
 
 };

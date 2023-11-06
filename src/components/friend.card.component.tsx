@@ -40,6 +40,17 @@ const FriendCardComponent: React.FC<{
     return phrases[randomIndex];
   };
 
+  const _startCall = () => {
+    if (userState.actualUser) {
+      conversationService
+        .createConversation([userState.actualUser, user])
+        .then((c) => {
+          dispatch(addConversation(c));
+          startCall(c);
+        });
+    }
+  };
+
   const createConversation = () => {
     if (userState.actualUser) {
       conversationService
@@ -75,7 +86,7 @@ const FriendCardComponent: React.FC<{
             colorScheme={"green"}
             icon={<PhoneIcon />}
             aria-label={"Call"}
-            onClick={() => startCall(user.id ?? "")}
+            onClick={_startCall}
           />
           <IconButton
             colorScheme={"red"}

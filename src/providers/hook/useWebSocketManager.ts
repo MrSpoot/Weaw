@@ -12,6 +12,7 @@ import {
 } from "../../reducer/slice/userSlice";
 import conversationService from "../../services/conversation.service";
 import { RootState } from "../../store";
+import { Conversation } from "../../types/conversation.type";
 import { Message } from "../../types/message.type";
 import { SocialRequest } from "../../types/social.type";
 import {
@@ -116,8 +117,7 @@ export const useWebSocketManager = (url: string) => {
         await peerConnection.setLocalDescription(answer);
     
         const callPayload: WebSocketCallPayload = {
-          sender: userState.actualUser,
-          receiverId: payload.sender.id ?? "",
+          conversation: payload.conversation,
           webRTCMessage: {
             type: answer.type,
             sdp: answer.sdp ?? "",
@@ -145,7 +145,7 @@ export const useWebSocketManager = (url: string) => {
     websocket?.send(JSON.stringify(message));
   };
 
-  const startCall = async (userId: string) => {
+  const startCall = async (conversation: Conversation) => {
     try {
       if(userState.actualUser){
 
@@ -162,8 +162,7 @@ export const useWebSocketManager = (url: string) => {
       const offer = await peerConnection.createOffer();
       await peerConnection.setLocalDescription(offer);
       const callPayload: WebSocketCallPayload = {
-        sender: userState.actualUser,
-        receiverId: userId,
+       conversation: conversation,
         webRTCMessage: {
           type: offer.type,
           sdp: offer.sdp ?? "",

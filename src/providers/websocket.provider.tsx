@@ -1,4 +1,5 @@
 import React from "react";
+import { Conversation } from "../types/conversation.type";
 import { WebSocketMessage } from "../types/websocket.type";
 import { useWebSocketManager } from "./hook/useWebSocketManager";
 
@@ -9,7 +10,7 @@ type ContainerProps = {
 type WebSocketProvider = {
   sendMessage: (msg: WebSocketMessage) => void;
   connect: (token: string) => void;
-  startCall: (userId: string) => void;
+  startCall: (conversation: Conversation) => void;
 };
 
 const WebSocketContext = React.createContext({} as WebSocketProvider);
@@ -27,8 +28,8 @@ export const WebSocketProvider = (children: ContainerProps) => {
     connect: (token: string) => {
       ws.connect(token);
     },
-    startCall: (userId: string) => {
-      ws.startCall(userId);
+    startCall: (conversation: Conversation) => {
+      ws.startCall(conversation);
     },
   };
 
