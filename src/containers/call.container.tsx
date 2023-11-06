@@ -1,27 +1,21 @@
-import { useEffect, useRef, useState } from "react";
-import { useRoute } from "../providers/route.provider";
 import {
   Avatar,
   Box,
   Center,
   Flex,
-  Grid,
   IconButton,
   Spinner,
   Text,
-  Wrap,
-  WrapItem,
 } from "@chakra-ui/react";
+import { useRef, useState } from "react";
+import Webcam from "react-webcam";
 import {
   CameraIcon,
   MicrophoneIcon,
-  PhoneIcon,
   PhoneXMarkIcon,
   SpeakerIcon,
   SpeakerMutedIcon,
 } from "../components/icon.components";
-import { User } from "../types/user.type";
-import Webcam from "react-webcam";
 
 const CallContainer = () => {
   const [webcamIsActive, setWebcamIsActive] = useState(false);

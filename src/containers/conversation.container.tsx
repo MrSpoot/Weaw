@@ -1,4 +1,13 @@
-import { Box, Button, Flex, HStack, Input, VStack } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Input,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import Picker from "@emoji-mart/react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -67,6 +76,25 @@ const ConversationContainer: React.FC<{ conversation: Conversation }> = ({
   return (
     <>
       <VStack flex={1}>
+        <Flex
+          bg={"blackAlpha.100"}
+          w={"full"}
+          p={2}
+          shadow={"md"}
+          alignItems={"center"}
+          gap={2}
+        >
+          {conversation.users
+            .filter((u) => u.id !== userState.actualUser?.id ?? "")
+            .map((u) => {
+              return (
+                <>
+                  <Avatar size={"sm"} name={u.nickname} />
+                  <Text>{u.nickname}</Text>
+                </>
+              );
+            })}
+        </Flex>
         <Flex direction={"row"} h="100vh" overflowY="auto" w={"full"} px={4}>
           <Flex direction="column-reverse" overflowY="auto" gap={2} w={"100%"}>
             <MessageListComponent conversationId={conversation?.id ?? ""} />
