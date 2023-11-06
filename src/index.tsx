@@ -8,55 +8,55 @@ import LoginContainer from "./containers/login.container";
 import NotFoundContainer from "./containers/not-found.container";
 import "./index.css";
 import { ResponseProvider } from "./providers/response.provider";
-import { RouteProvider } from "./providers/route.provider";
+import { RouteProviderComponent } from "./providers/route.provider";
 import { WebSocketProvider } from "./providers/websocket.provider";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
-import { theme } from "./theme";
+import VerifyAccountContainer from "./containers/verify.account.container";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <RouteProvider>
+      <RouteProviderComponent>
         <LoadingAppContainer>
           <></>
         </LoadingAppContainer>
-      </RouteProvider>
+      </RouteProviderComponent>
     ),
   },
   {
-    path: "/test",
+    path: "/verify",
     element: (
-      <RouteProvider>
-        <AppContainer />
-      </RouteProvider>
+      <RouteProviderComponent>
+        <VerifyAccountContainer />
+      </RouteProviderComponent>
     ),
   },
   {
     path: "/app",
     element: (
-      <RouteProvider>
+      <RouteProviderComponent>
         <LoadingAppContainer>
           <AppContainer />
         </LoadingAppContainer>
-      </RouteProvider>
+      </RouteProviderComponent>
     ),
   },
   {
     path: "/auth",
     element: (
-      <RouteProvider>
+      <RouteProviderComponent>
         <LoginContainer />
-      </RouteProvider>
+      </RouteProviderComponent>
     ),
   },
   {
     path: "/*",
     element: (
-      <RouteProvider>
+      <RouteProviderComponent>
         <NotFoundContainer />
-      </RouteProvider>
+      </RouteProviderComponent>
     ),
   },
 ]);

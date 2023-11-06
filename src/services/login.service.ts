@@ -12,6 +12,12 @@ const login = (login: Login): Promise<string> => {
   });
 };
 
+const verifyAccount = (token: string): Promise<boolean> => {
+  return http.get(servicePath + "/verify/" + token).then((res: any) => {
+    return res.data;
+  });
+};
+
 const register = (user: User) => {
   return http.post(servicePath + "/signup", user).then((res: any) => {
     return res;
@@ -21,6 +27,7 @@ const register = (user: User) => {
 const loginService = {
   login,
   register,
+  verifyAccount,
 };
 
 export default loginService;

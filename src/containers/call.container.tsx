@@ -24,7 +24,12 @@ const CallContainer = () => {
   return (
     <>
       <Flex direction={"column"} flex={1}>
-        <Flex flex={1} justifyContent={"center"} alignItems={"center"}>
+        <Flex
+          flex={1}
+          justifyContent={"center"}
+          alignItems={"center"}
+          overflowY={"auto"}
+        >
           <Flex gap={2} flexWrap={"wrap"} justifyContent={"center"}>
             <UserCallingCardComponent webcamIsActive={webcamIsActive} />
             <UserCallingCardComponent webcamIsActive={webcamIsActive} />
