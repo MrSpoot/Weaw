@@ -19,22 +19,25 @@ import { RootState } from "../store";
 
 const CallModalComponent: React.FC = () => {
   const callState = useSelector((state: RootState) => state.call);
+  const userState = useSelector((state: RootState) => state.users);
 
   const audio = new Audio(ringer);
   audio.loop = true;
 
-  const isOpen = false;
-
   useEffect(() => {
-    if (isOpen) {
+    if (callState.isCalling) {
       audio.play();
     } else {
       audio.pause();
     }
   }, []);
 
+  useEffect(() => {
+    console.log(callState.isCalling);
+  }, [callState.isCalling]);
+
   return (
-    <Modal isOpen={callState.calling} onClose={() => {}} isCentered>
+    <Modal isOpen={callState.isCalling} onClose={() => {}} isCentered>
       <ModalOverlay />
       <ModalContent rounded={"2xl"}>
         <ModalBody p={8} aspectRatio={"1/1"}>
@@ -45,26 +48,32 @@ const CallModalComponent: React.FC = () => {
             justifyContent={"space-evenly"}
           >
             <AvatarGroup max={2}>
-              <Avatar size={"xl"}></Avatar>
+              {callState.conversation?.users
+                .filter((u) => u.id !== userState.actualUser?.id)
+                .map((u) => (
+                  <Avatar size={"xl"} name={u.nickname}></Avatar>
+                ))}
             </AvatarGroup>
             <Text fontSize={"xl"} fontWeight={"bold"}>
               MrSpoot is calling
             </Text>
             <HStack justifyContent={"space-evenly"} w={"full"}>
-              <Flex direction={"column"} gap={2} alignItems={"center"}>
-                <Flex>
-                  <IconButton
-                    size={"lg"}
-                    rounded={"full"}
-                    colorScheme={"green"}
-                    aria-label={"accept-call"}
-                  >
-                    <PhoneIcon />
-                  </IconButton>
-                </Flex>
+              {callState.direction === "RECEIVER" && (
+                <Flex direction={"column"} gap={2} alignItems={"center"}>
+                  <Flex>
+                    <IconButton
+                      size={"lg"}
+                      rounded={"full"}
+                      colorScheme={"green"}
+                      aria-label={"accept-call"}
+                    >
+                      <PhoneIcon />
+                    </IconButton>
+                  </Flex>
 
-                <Text fontWeight={"semibold"}>Join Call</Text>
-              </Flex>
+                  <Text fontWeight={"semibold"}>Join Call</Text>
+                </Flex>
+              )}
 
               <Flex direction={"column"} gap={2} alignItems={"center"}>
                 <Flex>
@@ -72,7 +81,7 @@ const CallModalComponent: React.FC = () => {
                     size={"lg"}
                     rounded={"full"}
                     colorScheme={"red"}
-                    aria-label={"accept-call"}
+                    aria-label={"decline-call"}
                   >
                     <PhoneXMarkIcon />
                   </IconButton>

@@ -1,24 +1,33 @@
 // conversationsSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { WebRTCMessage } from "../../types/websocket.type";
+import { Conversation } from "../../types/conversation.type";
 
 type callDirection = "RECEIVER" | "EMITTER";
 
 interface CallState {
-  calling: boolean;
+  conversation: Conversation | undefined;
+  isCalling: boolean;
   direction: callDirection;
+  webRTCInfo: WebRTCMessage | undefined;
 }
 
 const initialState: CallState = {
-  calling: false,
+  conversation: undefined,
+  isCalling: false,
   direction: "RECEIVER",
+  webRTCInfo: undefined,
 };
 
 const callSlice = createSlice({
   name: "call",
   initialState,
   reducers: {
-    setCall(state, action: PayloadAction<boolean>) {
-      state.calling = action.payload;
+    setCall(state, action: PayloadAction<CallState>) {
+      state.conversation = action.payload.conversation;
+      state.direction = action.payload.direction;
+      state.isCalling = action.payload.isCalling;
+      state.webRTCInfo = action.payload.webRTCInfo;
     },
   },
 });

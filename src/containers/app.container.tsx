@@ -19,7 +19,7 @@ const AppContainer: React.FC = () => {
     (state: RootState) => state.conversations
   );
 
-  const [pageType, setPageType] = useState<PageType>("FRIENDS");
+  const [pageType, setPageType] = useState<PageType>("CALL");
 
   const [conversation, setConversation] = useState<Conversation>();
 

@@ -23,15 +23,14 @@ export type WebSocketPrivateMessagePayload = {
 
 export type WebSocketCallPayload = {
   conversation: Conversation;
-  webRTCMessage: WebRTCMessage;
-
+  webRTCInfo: WebRTCMessage;
 };
 
 export type WebRTCMessage = {
   type: string;
-  sdp : string;
+  sdp: string;
   iceCandidates?: { [key: string]: string };
-}
+};
 
 export type WebSocketCallResponsePayload = {
   response: ResponseType;
