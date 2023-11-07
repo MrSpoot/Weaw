@@ -1,8 +1,8 @@
+import { Center, Spinner } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useRoute } from "../providers/route.provider";
 import loginService from "../services/login.service";
-import { Center, Spinner } from "@chakra-ui/react";
 
 const VerifyAccountContainer = () => {
   const [searchParams] = useSearchParams();
