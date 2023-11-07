@@ -2,7 +2,6 @@ import { PhoneIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   AvatarGroup,
-  Text,
   Flex,
   HStack,
   IconButton,
@@ -10,12 +9,13 @@ import {
   ModalBody,
   ModalContent,
   ModalOverlay,
+  Text,
 } from "@chakra-ui/react";
-import { PhoneXMarkIcon } from "./icon.components";
-import ringer from "../resources/discord-call-sound.mp3";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import ringer from "../resources/discord-call-sound.mp3";
 import { RootState } from "../store";
+import { PhoneXMarkIcon } from "./icon.components";
 
 const CallModalComponent: React.FC = () => {
   const callState = useSelector((state: RootState) => state.call);
@@ -31,10 +31,6 @@ const CallModalComponent: React.FC = () => {
       audio.pause();
     }
   }, []);
-
-  useEffect(() => {
-    console.log(callState.isCalling);
-  }, [callState.isCalling]);
 
   return (
     <Modal isOpen={callState.isCalling} onClose={() => {}} isCentered>

@@ -88,8 +88,8 @@ const FriendListPageComponent = () => {
 
       <VStack flex={1}>
         <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
-          {userState.social?.friends.map((friends) => (
-            <FriendCardComponent user={friends} onClick={() => {}} />
+          {userState.social?.friends.map((friends, i) => (
+            <FriendCardComponent key={i} user={friends} onClick={() => {}} />
           ))}
         </Flex>
       </VStack>

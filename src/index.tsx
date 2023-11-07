@@ -1,18 +1,21 @@
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AppContainer from "./containers/app.container";
+import CallContainer from "./containers/call.container";
+import ConversationContainer from "./containers/conversation.container";
+import FriendsContainer from "./containers/friends.container";
 import LoadingAppContainer from "./containers/loading.app.container";
 import LoginContainer from "./containers/login.container";
 import NotFoundContainer from "./containers/not-found.container";
+import VerifyAccountContainer from "./containers/verify.account.container";
 import "./index.css";
 import { ResponseProvider } from "./providers/response.provider";
 import { RouteProviderComponent } from "./providers/route.provider";
 import { WebSocketProvider } from "./providers/websocket.provider";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
-import VerifyAccountContainer from "./containers/verify.account.container";
 
 const router = createBrowserRouter([
   {
@@ -38,7 +41,33 @@ const router = createBrowserRouter([
     element: (
       <RouteProviderComponent>
         <LoadingAppContainer>
-          <AppContainer />
+          <AppContainer>
+            <FriendsContainer />
+          </AppContainer>
+        </LoadingAppContainer>
+      </RouteProviderComponent>
+    ),
+  },
+  {
+    path: "/app/channel/:conversationId",
+    element: (
+      <RouteProviderComponent>
+        <LoadingAppContainer>
+          <AppContainer>
+            <ConversationContainer />
+          </AppContainer>
+        </LoadingAppContainer>
+      </RouteProviderComponent>
+    ),
+  },
+  {
+    path: "/app/channel/:conversationId/call",
+    element: (
+      <RouteProviderComponent>
+        <LoadingAppContainer>
+          <AppContainer>
+            <CallContainer />
+          </AppContainer>
         </LoadingAppContainer>
       </RouteProviderComponent>
     ),

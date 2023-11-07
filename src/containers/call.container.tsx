@@ -7,7 +7,7 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import {
   CameraIcon,
@@ -17,9 +17,13 @@ import {
   SpeakerMutedIcon,
 } from "../components/icon.components";
 
-const CallContainer = () => {
+const CallContainer: React.FC = () => {
   const [webcamIsActive, setWebcamIsActive] = useState(false);
   const [soundIsMuted, setSoundIsMuted] = useState(false);
+
+  useEffect(() => {
+    console.log("J4AI REUSSI A ARRIVER JUSUQ4ICI");
+  }, []);
 
   return (
     <>
@@ -30,7 +34,7 @@ const CallContainer = () => {
           alignItems={"center"}
           overflowY={"auto"}
         >
-          <Flex gap={2} flexWrap={"wrap"} justifyContent={"center"}>
+          <Flex gap={2} flexWrap={"wrap"} justifyContent={"center"} w={"75%"}>
             <UserCallingCardComponent webcamIsActive={webcamIsActive} />
             <UserCallingCardComponent webcamIsActive={webcamIsActive} />
             <UserCallingCardComponent webcamIsActive={webcamIsActive} />
@@ -87,7 +91,7 @@ const UserCallingCardComponent: React.FC<{ webcamIsActive: boolean }> = ({
   const handleUserMedia = () => setTimeout(() => setLoading(false), 1_000);
 
   return (
-    <Box rounded={"lg"} bg={"purple"} aspectRatio={"16/9"} w={500}>
+    <Box rounded={"lg"} bg={"purple"} aspectRatio={"16/9"} w={"40%"}>
       {webcamIsActive ? (
         <Center
           overflow={"hidden"}

@@ -6,6 +6,7 @@ const NotFoundContainer = () => {
 
   useEffect(() => {
     navigateTo("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <p>404 Not Found</p>;

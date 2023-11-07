@@ -1,32 +1,19 @@
 import { AddIcon, StarIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
+import CallModalComponent from "../components/call.modal.component";
 import ConversationCardComponent from "../components/conversation.card.component";
 import UserActionComponent from "../components/user.action.component";
+import { useRoute } from "../providers/route.provider";
 import { RootState } from "../store";
-import { Conversation } from "../types/conversation.type";
-import ConversationContainer from "./conversation.container";
-import FriendsContainer from "./friends.container";
-import CallModalComponent from "../components/call.modal.component";
-import CallContainer from "./call.container";
 
-type PageType = "CONVERSATION" | "FRIENDS" | "CALL";
-
-const AppContainer: React.FC = () => {
+const AppContainer: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const userState = useSelector((state: RootState) => state.users);
+  const { navigateTo } = useRoute();
   const conversationState = useSelector(
     (state: RootState) => state.conversations
   );
-
-  const [pageType, setPageType] = useState<PageType>("CALL");
-
-  const [conversation, setConversation] = useState<Conversation>();
-
-  const changeConversation = (conversation: Conversation) => {
-    setConversation(conversation);
-    setPageType("CONVERSATION");
-  };
 
   return (
     <>
@@ -67,7 +54,7 @@ const AppContainer: React.FC = () => {
                 gap={2}
                 textColor={"gray.500"}
                 leftIcon={<StarIcon color={"gray.500"} />}
-                onClick={() => setPageType("FRIENDS")}
+                onClick={() => navigateTo("app")}
               >
                 Amis
               </Button>
@@ -78,7 +65,9 @@ const AppContainer: React.FC = () => {
                       key={index}
                       conversation={c.conversation}
                       actualUser={userState.actualUser}
-                      onClick={changeConversation}
+                      onClick={() =>
+                        navigateTo(`app/channel/${c.conversation.id}`)
+                      }
                     />
                   )
                 );
@@ -91,11 +80,7 @@ const AppContainer: React.FC = () => {
               />
             )}
           </Flex>
-          {pageType === "CONVERSATION" && conversation && (
-            <ConversationContainer conversation={conversation} />
-          )}
-          {pageType === "FRIENDS" && <FriendsContainer />}
-          {pageType === "CALL" && <CallContainer />}
+          {children}
         </Flex>
       </Box>
     </>

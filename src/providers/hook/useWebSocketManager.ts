@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setWebSocketConnectionState } from "../../reducer/slice/appSlice";
+import { setCall } from "../../reducer/slice/callSlice.ts";
 import {
   AppDispatch,
   addConversation,
@@ -20,7 +21,6 @@ import {
   WebSocketFriendRequestResponsePayload,
   WebSocketMessage,
 } from "../../types/websocket.type";
-import { setCall } from "../../reducer/slice/callSlice.ts";
 
 export const useWebSocketManager = (url: string) => {
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);
@@ -36,20 +36,17 @@ export const useWebSocketManager = (url: string) => {
     const ws = new WebSocket(url + "?token=" + token);
 
     ws.onopen = (event) => {
-      console.log("WebSocket ouvert:", event);
       dispatch(setWebSocketConnectionState(true));
       setWebSocket(ws);
     };
 
     ws.onclose = () => {
-      console.log("Websocket fermé, tentative de reconnexion");
       dispatch(setWebSocketConnectionState(false));
       setTimeout(() => connect(token), 5000);
     };
 
     ws.onmessage = (event) => {
       const object: WebSocketMessage = JSON.parse(event.data);
-      console.log(object);
       switch (object.actionType) {
         case "PRIVATE_RESPONSE":
           processPrivateMessageReception(object);

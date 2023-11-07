@@ -1,22 +1,24 @@
+import Cookies from "js-cookie";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import LoaderComponent from "../components/loader.component";
+import http from "../http-common";
 import { useRoute } from "../providers/route.provider";
+import { useWebSocket } from "../providers/websocket.provider";
 import { AppDispatch } from "../reducer/slice/conversationSlice";
 import { setSocial, setUser } from "../reducer/slice/userSlice";
 import { fetchAndAddConversations } from "../reducer/thunk/conversation.tunk";
 import conversationService from "../services/conversation.service";
 import userService from "../services/user.service";
 import { RootState } from "../store";
-import { useWebSocket } from "../providers/websocket.provider";
-import http from "../http-common";
-import Cookies from "js-cookie";
 
 const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
   children,
 }) => {
   const { navigateTo } = useRoute();
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
   const { connect } = useWebSocket();
 
@@ -42,7 +44,11 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
       dispatch(fetchAndAddConversations(c));
 
       token && connect(token);
-      navigateTo("app");
+      if (location.pathname === "/") {
+        navigateTo("app");
+      } else {
+        navigateTo(location.pathname.slice(1));
+      }
     } catch (error: any) {
       navigateTo("auth");
       setIsLoading(false);

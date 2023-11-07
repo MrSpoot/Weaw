@@ -1,6 +1,7 @@
 import { ChatIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Avatar, AvatarBadge, Flex, IconButton, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRoute } from "../providers/route.provider";
 import { useWebSocket } from "../providers/websocket.provider";
 import {
   AppDispatch,
@@ -34,6 +35,7 @@ const FriendCardComponent: React.FC<{
   const { startCall } = useWebSocket();
   const userState = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch<AppDispatch>();
+  const { navigateTo } = useRoute();
 
   const handleRandomize = () => {
     const randomIndex = Math.floor(Math.random() * phrases.length);
@@ -57,6 +59,7 @@ const FriendCardComponent: React.FC<{
         .createConversation([userState.actualUser, user])
         .then((c) => {
           dispatch(addConversation(c));
+          navigateTo(`app/channel/${c.id}`);
         });
     }
   };

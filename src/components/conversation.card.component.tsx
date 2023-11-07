@@ -19,7 +19,7 @@ const ConversationCardComponent: React.FC<{
           conversation.users
             .filter((u) => u.id !== actualUser.id)
             .map((u, i) => (
-              <Flex alignItems={"center"} gap={2}>
+              <Flex key={i} alignItems={"center"} gap={2}>
                 <Avatar name={u.nickname} />
                 <Text>{u.nickname}</Text>
               </Flex>

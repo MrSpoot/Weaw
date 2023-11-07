@@ -1,6 +1,6 @@
 import { ContainerProps } from "@chakra-ui/react";
 import React from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type RouteProvider = { navigateTo: (route: string) => void };
 

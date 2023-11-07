@@ -22,12 +22,12 @@ import {
   VStack,
   useSteps,
 } from "@chakra-ui/react";
+import Cookies from "js-cookie";
 import { useState } from "react";
 import { useRoute } from "../providers/route.provider";
 import { useWebSocket } from "../providers/websocket.provider";
 import loginService from "../services/login.service";
 import { User } from "../types/user.type";
-import Cookies from "js-cookie";
 
 const LoginContainer = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -104,8 +104,6 @@ const LoginForm: React.FC<{ toggleForm: () => void }> = ({ toggleForm }) => {
             colorScheme="blue"
             w="full"
             onClick={() => {
-              console.log(process.env.REACT_APP_SERVER_DOMAIN);
-              console.log(process.env.REACT_APP_SERVER_PORT);
               login &&
                 password &&
                 loginService

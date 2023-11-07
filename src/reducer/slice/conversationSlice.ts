@@ -25,7 +25,6 @@ const conversationsSlice = createSlice({
   initialState,
   reducers: {
     addNewMessage(state, action: PayloadAction<Message>) {
-      console.log("ALLO");
       const conversationState = state.find(
         (c) => c.conversation.id === action.payload.conversationId
       );
