@@ -12,6 +12,8 @@ import { RootState } from "../store";
 import { User } from "../types/user.type";
 import CardComponent from "./card.component";
 import { PhoneIcon } from "./icon.components";
+import { setCall } from "../reducer/slice/callSlice.ts";
+import { useCall } from "../providers/call.provider";
 
 const getStatus = (status: string) => {
   if (status === "online") {
@@ -32,10 +34,11 @@ const FriendCardComponent: React.FC<{
   onClick: (user: User) => void;
 }> = ({ user, onClick }) => {
   const phrases: string[] = ["online", "red", "absent", "disconnect"];
-  const { startCall } = useWebSocket();
   const userState = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch<AppDispatch>();
   const { navigateTo } = useRoute();
+
+  const { startCall } = useCall();
 
   const handleRandomize = () => {
     const randomIndex = Math.floor(Math.random() * phrases.length);
@@ -48,7 +51,17 @@ const FriendCardComponent: React.FC<{
         .createConversation([userState.actualUser, user])
         .then((c) => {
           dispatch(addConversation(c));
-          startCall(c);
+          userState.actualUser &&
+            startCall(userState.actualUser, c)?.then((info) => {
+              dispatch(
+                setCall({
+                  conversation: c,
+                  isCalling: true,
+                  direction: "EMITTER",
+                  webRTCInfo: info,
+                })
+              );
+            });
         });
     }
   };

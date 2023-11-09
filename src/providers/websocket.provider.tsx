@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Conversation } from "../types/conversation.type";
-import { WebSocketMessage } from "../types/websocket.type";
+import {
+  WebRTCMessage,
+  WebSocketCallPayload,
+  WebSocketMessage,
+} from "../types/websocket.type";
 import { useWebSocketManager } from "./hook/useWebSocketManager";
+import { useDispatch, useSelector } from "react-redux";
+import { setCall } from "../reducer/slice/callSlice.ts";
+import { RootState } from "../store";
+import { AppDispatch } from "../reducer/slice/conversationSlice";
+import { User } from "../types/user.type";
 
 type ContainerProps = {
   children: React.ReactNode;
@@ -10,26 +19,22 @@ type ContainerProps = {
 type WebSocketProvider = {
   sendMessage: (msg: WebSocketMessage) => void;
   connect: (token: string) => void;
-  startCall: (conversation: Conversation) => void;
 };
 
 const WebSocketContext = React.createContext({} as WebSocketProvider);
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const WebSocketProvider = (children: ContainerProps) => {
-  const ws = useWebSocketManager(
+  const { websocket, connect } = useWebSocketManager(
     `wss://${process.env.REACT_APP_SERVER_DOMAIN}:${process.env.REACT_APP_SERVER_PORT}/rest/ws`
   );
 
   const value: WebSocketProvider = {
     sendMessage: (msg: WebSocketMessage) => {
-      ws.sendMessage(msg);
+      websocket?.send(JSON.stringify(msg));
     },
     connect: (token: string) => {
-      ws.connect(token);
-    },
-    startCall: (conversation: Conversation) => {
-      ws.startCall(conversation);
+      connect(token);
     },
   };
 

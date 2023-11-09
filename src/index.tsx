@@ -16,6 +16,8 @@ import { RouteProviderComponent } from "./providers/route.provider";
 import { WebSocketProvider } from "./providers/websocket.provider";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
+import { CallProviderComponent } from "./providers/call.provider";
+import WebsocketContainer from "./containers/websocket.container";
 
 const router = createBrowserRouter([
   {
@@ -95,9 +97,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ResponseProvider>
       <Provider store={store}>
         <WebSocketProvider>
-          <div className="h-screen w-screen bg-gray-100">
-            <RouterProvider router={router} />
-          </div>
+          <CallProviderComponent>
+            <div className="h-screen w-screen bg-gray-100">
+              <RouterProvider router={router} />
+            </div>
+          </CallProviderComponent>
         </WebSocketProvider>
       </Provider>
     </ResponseProvider>

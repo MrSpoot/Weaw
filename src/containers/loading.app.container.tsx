@@ -12,6 +12,7 @@ import { fetchAndAddConversations } from "../reducer/thunk/conversation.tunk";
 import conversationService from "../services/conversation.service";
 import userService from "../services/user.service";
 import { RootState } from "../store";
+import WebsocketContainer from "./websocket.container";
 
 const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
   children,
@@ -27,48 +28,58 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
   const appState = useSelector((state: RootState) => state.app);
   const userState = useSelector((state: RootState) => state.users);
 
-  const loadData = async () => {
+  useEffect(() => {
     const token = Cookies.get("userToken");
     if (token) {
       http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      connect(token);
     }
 
-    try {
-      const u = await userService.getUser();
-      dispatch(setUser(u));
+    const promises: Promise<any>[] = [];
 
-      const social = await userService.getUserSocial();
-      dispatch(setSocial(social));
+    promises.push(
+      userService.getUser().then((u) => {
+        dispatch(setUser(u));
+      })
+    );
+    promises.push(
+      conversationService.getUserConversations().then((c) => {
+        dispatch(fetchAndAddConversations(c));
+      })
+    );
+    promises.push(
+      userService.getUserSocial().then((s) => {
+        dispatch(setSocial(s));
+      })
+    );
 
-      const c = await conversationService.getUserConversations();
-      dispatch(fetchAndAddConversations(c));
-
-      token && connect(token);
-      if (location.pathname === "/") {
-        navigateTo("app");
-      } else {
-        navigateTo(location.pathname.slice(1));
-      }
-    } catch (error: any) {
-      navigateTo("auth");
-      setIsLoading(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
+    Promise.all(promises)
+      .then(() => {
+        setIsLoading(false);
+        if (location.pathname === "/") {
+          navigateTo("app");
+        } else {
+          navigateTo(location.pathname.slice(1));
+        }
+      })
+      .catch(() => {
+        navigateTo("auth");
+        setIsLoading(false);
+      });
   }, []);
 
-  return isLoading ||
-    !!!appState.isWebSocketConnected ||
-    !!!userState.actualUser ? (
-    <div className="flex h-full w-full items-center justify-center">
-      <LoaderComponent />
-    </div>
-  ) : (
-    children
+  return (
+    <WebsocketContainer>
+      {isLoading ||
+      !!!appState.isWebSocketConnected ||
+      !!!userState.actualUser ? (
+        <div className="flex h-full w-full items-center justify-center">
+          <LoaderComponent />
+        </div>
+      ) : (
+        children
+      )}
+    </WebsocketContainer>
   );
 };
 

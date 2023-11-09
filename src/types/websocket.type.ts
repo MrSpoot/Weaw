@@ -7,6 +7,12 @@ export type WebSocketMessageActionType =
   | "PRIVATE_RESPONSE"
   | "CALL";
 
+// Création d'un type pour la fonction de rappel
+export type MessageReceivedCallback = (data: any) => void;
+
+// Création d'un type pour l'événement personnalisé
+export type WebSocketMessageEvent = CustomEvent<MessageReceivedCallback>;
+
 export type WebSocketMessage = {
   actionType: WebSocketMessageActionType;
   payload: Object;

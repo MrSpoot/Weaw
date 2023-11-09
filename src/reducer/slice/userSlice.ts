@@ -20,19 +20,19 @@ const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<User>) {
+    setUser: (state, action: PayloadAction<User>) => {
       state.actualUser = action.payload;
     },
-    setSocial(state, action: PayloadAction<Social>) {
+    setSocial: (state, action: PayloadAction<Social>) => {
       state.social = action.payload;
     },
-    addSocialRequest(state, action: PayloadAction<SocialRequest>) {
+    addSocialRequest: (state, action: PayloadAction<SocialRequest>) => {
       state.social?.socialRequests.push(action.payload);
     },
-    processSocialRequestResponse(
+    processSocialRequestResponse: (
       state,
       action: PayloadAction<WebSocketFriendRequestResponsePayload>
-    ) {
+    ) => {
       const socialRequest = state.social?.socialRequests.find(
         (sr) => sr.id === action.payload.socialRequestId
       );

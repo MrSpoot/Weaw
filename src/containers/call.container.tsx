@@ -21,10 +21,6 @@ const CallContainer: React.FC = () => {
   const [webcamIsActive, setWebcamIsActive] = useState(false);
   const [soundIsMuted, setSoundIsMuted] = useState(false);
 
-  useEffect(() => {
-    console.log("J4AI REUSSI A ARRIVER JUSUQ4ICI");
-  }, []);
-
   return (
     <>
       <Flex direction={"column"} flex={1}>
