@@ -7,9 +7,11 @@ import http from "../http-common";
 import { useRoute } from "../providers/route.provider";
 import { useWebSocket } from "../providers/websocket.provider";
 import { AppDispatch } from "../reducer/slice/conversationSlice";
+import { addServers } from "../reducer/slice/serverSlice";
 import { setSocial, setUser } from "../reducer/slice/userSlice";
 import { fetchAndAddConversations } from "../reducer/thunk/conversation.tunk";
 import conversationService from "../services/conversation.service";
+import serverService from "../services/server.service";
 import userService from "../services/user.service";
 import { RootState } from "../store";
 
@@ -48,6 +50,14 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
     promises.push(
       userService.getUserSocial().then((s) => {
         dispatch(setSocial(s));
+      })
+    );
+    promises.push(
+      serverService.getUserServers().then((servers) => {
+        servers.forEach((serv) => {
+          dispatch(fetchAndAddConversations(serv.conversations));
+        });
+        dispatch(addServers(servers));
       })
     );
 

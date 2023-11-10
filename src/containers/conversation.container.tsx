@@ -66,6 +66,7 @@ const ConversationContainer: React.FC = () => {
           .catch(() => navigateTo("app"));
       }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
 

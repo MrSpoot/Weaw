@@ -1,6 +1,6 @@
 import { Avatar, Flex, Text } from "@chakra-ui/react";
-import { Conversation } from "../types/conversation.type";
-import { User } from "../types/user.type";
+import { Conversation } from "../../types/conversation.type";
+import { User } from "../../types/user.type";
 import CardComponent from "./card.component";
 
 const ConversationCardComponent: React.FC<{

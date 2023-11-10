@@ -1,8 +1,8 @@
 import { Button, Flex, Input, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import FriendCardComponent from "../components/friend.card.component";
-import FriendRequestCardComponent from "../components/friend.request.card.component";
+import FriendCardComponent from "../components/card/friend.card.component";
+import FriendRequestCardComponent from "../components/card/friend.request.card.component";
 import { useWebSocket } from "../providers/websocket.provider";
 import { RootState } from "../store";
 import { UserStatus } from "../types/user.type";

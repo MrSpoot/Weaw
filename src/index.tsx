@@ -4,20 +4,21 @@ import { Provider } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AppContainer from "./containers/app.container";
 import CallContainer from "./containers/call.container";
+import ChannelListContainer from "./containers/channel.list.container";
 import ConversationContainer from "./containers/conversation.container";
+import ConversationListContainer from "./containers/conversation.list.container";
 import FriendsContainer from "./containers/friends.container";
 import LoadingAppContainer from "./containers/loading.app.container";
 import LoginContainer from "./containers/login.container";
 import NotFoundContainer from "./containers/not-found.container";
 import VerifyAccountContainer from "./containers/verify.account.container";
 import "./index.css";
+import { CallProviderComponent } from "./providers/call.provider";
 import { ResponseProvider } from "./providers/response.provider";
 import { RouteProviderComponent } from "./providers/route.provider";
 import { WebSocketProvider } from "./providers/websocket.provider";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
-import { CallProviderComponent } from "./providers/call.provider";
-import WebsocketContainer from "./containers/websocket.container";
 
 const router = createBrowserRouter([
   {
@@ -43,9 +44,10 @@ const router = createBrowserRouter([
     element: (
       <RouteProviderComponent>
         <LoadingAppContainer>
-          <AppContainer>
-            <FriendsContainer />
-          </AppContainer>
+          <AppContainer
+            leftChildren={<ConversationListContainer />}
+            children={<FriendsContainer />}
+          />
         </LoadingAppContainer>
       </RouteProviderComponent>
     ),
@@ -55,9 +57,10 @@ const router = createBrowserRouter([
     element: (
       <RouteProviderComponent>
         <LoadingAppContainer>
-          <AppContainer>
-            <ConversationContainer />
-          </AppContainer>
+          <AppContainer
+            leftChildren={<ConversationListContainer />}
+            children={<ConversationContainer />}
+          />
         </LoadingAppContainer>
       </RouteProviderComponent>
     ),
@@ -67,9 +70,20 @@ const router = createBrowserRouter([
     element: (
       <RouteProviderComponent>
         <LoadingAppContainer>
-          <AppContainer>
-            <CallContainer />
-          </AppContainer>
+          <AppContainer leftChildren={<></>} children={<CallContainer />} />
+        </LoadingAppContainer>
+      </RouteProviderComponent>
+    ),
+  },
+  {
+    path: "/app/server/:serverId/channel/:conversationId",
+    element: (
+      <RouteProviderComponent>
+        <LoadingAppContainer>
+          <AppContainer
+            leftChildren={<ChannelListContainer />}
+            children={<ConversationContainer />}
+          />
         </LoadingAppContainer>
       </RouteProviderComponent>
     ),

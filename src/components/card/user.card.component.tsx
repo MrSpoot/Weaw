@@ -1,5 +1,5 @@
 import { Avatar, AvatarBadge, Box, Flex, Text } from "@chakra-ui/react";
-import { User } from "../types/user.type";
+import { User } from "../../types/user.type";
 
 const getStatus = (status: string) => {
   if (status === "online") {

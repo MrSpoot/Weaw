@@ -48,6 +48,24 @@ const conversationsSlice = createSlice({
         state.push(_conversationState);
       }
     },
+    addConversations(state, action: PayloadAction<Conversation[]>){
+      action.payload.forEach((conv) => {
+        // eslint-disable-next-line no-lone-blocks
+        {
+          const _conversationState: ConversationsState = {
+            conversation: conv,
+            messages: [],
+            currentPage: 1,
+            totalPages: 1,
+            totalMessagesCount: 0,
+            isLoading: false,
+            hasMoreItems: false,
+          };
+  
+          state.push(_conversationState);
+        }
+      })
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAndAddConversation.fulfilled, (state, action) => {
@@ -92,6 +110,6 @@ const conversationsSlice = createSlice({
   },
 });
 
-export const { addNewMessage, addConversation } = conversationsSlice.actions;
+export const { addNewMessage, addConversation,addConversations } = conversationsSlice.actions;
 export default conversationsSlice.reducer;
 export type AppDispatch = typeof store.dispatch;

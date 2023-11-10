@@ -13,9 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import ringer from "../resources/discord-call-sound.mp3";
-import { RootState } from "../store";
-import { PhoneXMarkIcon } from "./icon.components";
+import ringer from "../../resources/discord-call-sound.mp3";
+import { RootState } from "../../store";
+import { PhoneXMarkIcon } from "../icon.components";
 
 const CallModalComponent: React.FC = () => {
   const callState = useSelector((state: RootState) => state.call);

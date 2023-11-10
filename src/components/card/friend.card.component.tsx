@@ -1,18 +1,18 @@
 import { ChatIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Avatar, AvatarBadge, Flex, IconButton, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCall } from "../providers/call.provider";
-import { useRoute } from "../providers/route.provider";
-import { setCall } from "../reducer/slice/callSlice.ts";
+import { useCall } from "../../providers/call.provider";
+import { useRoute } from "../../providers/route.provider";
+import { setCall } from "../../reducer/slice/callSlice.ts";
 import {
   AppDispatch,
   addConversation,
-} from "../reducer/slice/conversationSlice";
-import conversationService from "../services/conversation.service";
-import { RootState } from "../store";
-import { User, UserStatus } from "../types/user.type";
+} from "../../reducer/slice/conversationSlice";
+import conversationService from "../../services/conversation.service";
+import { RootState } from "../../store";
+import { User, UserStatus } from "../../types/user.type";
+import { PhoneIcon } from "../icon.components";
 import CardComponent from "./card.component";
-import { PhoneIcon } from "./icon.components";
 
 const getStatus = (status: UserStatus) => {
   switch (status) {

@@ -1,15 +1,15 @@
 import { CheckIcon, CloseIcon, TimeIcon } from "@chakra-ui/icons";
 import { Avatar, AvatarBadge, Flex, IconButton, Text } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { useWebSocket } from "../providers/websocket.provider";
-import { RootState } from "../store";
-import { SocialRequest } from "../types/social.type";
-import { User } from "../types/user.type";
+import { useWebSocket } from "../../providers/websocket.provider";
+import { RootState } from "../../store";
+import { SocialRequest } from "../../types/social.type";
+import { User } from "../../types/user.type";
 import {
   ResponseType,
   WebSocketFriendRequestResponsePayload,
   WebSocketMessage,
-} from "../types/websocket.type";
+} from "../../types/websocket.type";
 import CardComponent from "./card.component";
 
 const getStatus = (status: string) => {
