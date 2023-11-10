@@ -14,7 +14,7 @@ import {
 type Page = "ADD" | "ONLINE" | "WAITING" | "ALL";
 
 const FriendsContainer = () => {
-  const [page, setPage] = useState<Page>("ONLINE");
+  const [page, setPage] = useState<Page>("ALL");
 
   return (
     <Flex direction={"column"} w={"100%"} gap={2} p={2}>
