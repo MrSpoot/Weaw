@@ -37,7 +37,12 @@ const UserActionComponent: React.FC<{
   return (
     <>
       {userState.actualUser && (
-        <Box p={2} bg="blue.100" onClick={() => onClick(user)}>
+        <Box
+          p={2}
+          bg="backgroundColor.600"
+          onClick={() => onClick(user)}
+          textColor={"gray.400"}
+        >
           <Flex alignItems={"center"} justifyContent={"space-between"}>
             <Flex gap={3}>
               <Avatar size="md">

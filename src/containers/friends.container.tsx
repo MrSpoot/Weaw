@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Text, VStack } from "@chakra-ui/react";
+import { Button, Divider, Flex, Input, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import FriendCardComponent from "../components/card/friend.card.component";
@@ -19,13 +19,33 @@ const FriendsContainer = () => {
   return (
     <Flex direction={"column"} w={"100%"} gap={2} p={2}>
       <Flex gap={2} mb={4}>
-        <Button h={8} onClick={() => setPage("ALL")} colorScheme={"gray"}>
+        <Button
+          h={8}
+          onClick={() => setPage("ALL")}
+          bg={page === "ALL" ? "backgroundColor.100" : "backgroundColor.200"}
+          textColor={page === "ALL" ? "gray.200" : "gray.500"}
+          _hover={{ bg: "backgroundColor.100", textColor: "gray.200" }}
+        >
           Tous
         </Button>
-        <Button h={8} onClick={() => setPage("ONLINE")} colorScheme={"gray"}>
+        <Button
+          h={8}
+          onClick={() => setPage("ONLINE")}
+          bg={page === "ONLINE" ? "backgroundColor.100" : "backgroundColor.200"}
+          textColor={page === "ONLINE" ? "gray.200" : "gray.500"}
+          _hover={{ bg: "backgroundColor.100", textColor: "gray.200" }}
+        >
           En Ligne
         </Button>
-        <Button h={8} onClick={() => setPage("WAITING")} colorScheme={"gray"}>
+        <Button
+          h={8}
+          onClick={() => setPage("WAITING")}
+          bg={
+            page === "WAITING" ? "backgroundColor.100" : "backgroundColor.200"
+          }
+          textColor={page === "WAITING" ? "gray.200" : "gray.500"}
+          _hover={{ bg: "backgroundColor.100", textColor: "gray.200" }}
+        >
           En Attente
         </Button>
         <Button h={8} onClick={() => setPage("ADD")} colorScheme="green">
@@ -94,7 +114,14 @@ const FriendListPageComponent: React.FC<{ status?: UserStatus }> = ({
       <Flex direction={"column"} gap={2} p={2}></Flex>
 
       <VStack flex={1}>
-        <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
+        <Flex
+          direction="column"
+          overflowY="auto"
+          gap={2}
+          w={"100%"}
+          textColor={"gray.300"}
+          fontWeight={"semibold"}
+        >
           {userState.social?.friends
             .filter((u) => {
               if (status) {
@@ -104,7 +131,14 @@ const FriendListPageComponent: React.FC<{ status?: UserStatus }> = ({
               }
             })
             .map((friends, i) => (
-              <FriendCardComponent key={i} user={friends} onClick={() => {}} />
+              <>
+                <Divider />
+                <FriendCardComponent
+                  key={i}
+                  user={friends}
+                  onClick={() => {}}
+                />
+              </>
             ))}
         </Flex>
       </VStack>

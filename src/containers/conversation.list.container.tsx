@@ -15,17 +15,22 @@ const ConversationListContainer = () => {
     <Flex
       direction="column"
       w="250px"
-      bg="gray.850"
+      bg="backgroundColor.400"
       overflowY="auto"
+      flex={1}
       p={2}
       gap={1}
     >
       <Button
         justifyContent={"start"}
         gap={2}
-        textColor={"gray.500"}
-        leftIcon={<StarIcon color={"gray.500"} />}
+        leftIcon={
+          <StarIcon color={"gray.500"} _groupHover={{ color: "gray.200" }} />
+        }
         onClick={() => navigateTo("app")}
+        bg="backgroundColor.400"
+        textColor={"gray.500"}
+        _hover={{ bg: "backgroundColor.100", textColor: "gray.200" }}
       >
         Amis
       </Button>

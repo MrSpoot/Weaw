@@ -5,7 +5,13 @@ const CardComponent: React.FC<{
   onClick?: (...args: any[]) => any;
 }> = ({ children, onClick = () => {} }) => {
   return (
-    <Box px={4} py={2} bg="blue.100" rounded={8} onClick={onClick}>
+    <Box
+      px={4}
+      py={2}
+      _hover={{ bg: "backgroundColor.100" }}
+      rounded={8}
+      onClick={onClick}
+    >
       {children}
     </Box>
   );

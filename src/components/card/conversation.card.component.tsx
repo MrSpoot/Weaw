@@ -10,7 +10,7 @@ const ConversationCardComponent: React.FC<{
 }> = ({ conversation, actualUser, onClick }) => {
   return (
     <CardComponent onClick={() => onClick(conversation)}>
-      <Flex gap={4}>
+      <Flex gap={4} textColor={"gray.500"} fontWeight={"semibold"}>
         {conversation.users.length > 2 ? (
           <Flex>
             <Avatar name={actualUser.nickname} />

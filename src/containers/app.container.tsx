@@ -1,5 +1,14 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Avatar, Box, Button, Divider, Flex, VStack } from "@chakra-ui/react";
+import { AddIcon, StarIcon } from "@chakra-ui/icons";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Flex,
+  IconButton,
+  ScaleFade,
+  VStack,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import CallModalComponent from "../components/modal/call.modal.component";
@@ -21,6 +30,22 @@ const AppContainer: React.FC<{
   const [serverCreationModalIsShow, setServerCreationModalIsShow] =
     useState(false);
 
+  const [hoveredServerBubble, setHoveredServerBubble] = useState(
+    Array(serverState.servers.length).fill(false)
+  );
+
+  const handleMouseEnter = (index: number) => {
+    const updatedHoveredItems = [...hoveredServerBubble];
+    updatedHoveredItems[index] = true;
+    setHoveredServerBubble(updatedHoveredItems);
+  };
+
+  const handleMouseLeave = (index: number) => {
+    const updatedHoveredItems = [...hoveredServerBubble];
+    updatedHoveredItems[index] = false;
+    setHoveredServerBubble(updatedHoveredItems);
+  };
+
   return (
     <>
       <WebsocketContainer>
@@ -32,33 +57,59 @@ const AppContainer: React.FC<{
             }}
           />
           <CallModalComponent />
-          <Box minH="100vh" bg="gray.200">
+          <Box minH="100vh" bg="backgroundColor.200">
             <Flex h="100vh" justify={"flex-start"}>
               <Flex
                 direction="column"
-                bg="gray.300"
+                bg="backgroundColor.800"
                 w="80px"
                 justifyContent="space-between"
               >
-                <VStack gap="2" py={2}>
-                  <Box
-                    h={"50px"}
-                    w={"50px"}
-                    rounded={"full"}
-                    bg={"red"}
-                    onClick={() => navigateTo("app")}
-                  ></Box>
-                  <Divider></Divider>
-                  {serverState.servers.map((s) => {
+                <VStack gap="2" py={2} pr={2}>
+                  <Flex alignItems={"center"} position={"relative"} gap={2}>
+                    <Box h={"2"} aspectRatio={"1/1"} roundedRight={"md"}></Box>
+                    <IconButton
+                      h={"50px"}
+                      w={"50px"}
+                      rounded={"full"}
+                      bg={"backgroundColor.200"}
+                      _hover={{ bg: "backgroundColor.100" }}
+                      icon={<StarIcon color={"gray.200"} />}
+                      onClick={() => navigateTo("app")}
+                      aria-label={""}
+                    ></IconButton>
+                  </Flex>
+                  {serverState.servers.map((s, index) => {
                     return (
-                      <ServerBubbleComponent
-                        server={s}
-                        onClick={() =>
-                          navigateTo(
-                            `app/server/${s.id}/channel/${s.conversations[0].id}`
-                          )
-                        }
-                      />
+                      <>
+                        <Flex
+                          alignItems={"center"}
+                          position={"relative"}
+                          gap={2}
+                        >
+                          <ScaleFade
+                            initialScale={0.1}
+                            in={hoveredServerBubble[index]}
+                          >
+                            <Box
+                              h={"4"}
+                              w={"2"}
+                              bg={"gray.300"}
+                              roundedRight={"md"}
+                            ></Box>
+                          </ScaleFade>
+                          <ServerBubbleComponent
+                            server={s}
+                            onClick={() =>
+                              navigateTo(
+                                `app/server/${s.id}/channel/${s.conversations[0].id}`
+                              )
+                            }
+                            onMouseEnter={() => handleMouseEnter(index)}
+                            onMouseLeave={() => handleMouseLeave(index)}
+                          />
+                        </Flex>
+                      </>
                     );
                   })}
                 </VStack>
@@ -97,10 +148,17 @@ const AppContainer: React.FC<{
 const ServerBubbleComponent: React.FC<{
   server: Server;
   onClick: () => void;
-}> = ({ server, onClick }) => {
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}> = ({ server, onClick, onMouseEnter, onMouseLeave }) => {
   return (
     <>
-      <Avatar name={server.name} onClick={onClick} />
+      <Avatar
+        name={server.name}
+        onClick={onClick}
+        onMouseEnter={() => onMouseEnter()}
+        onMouseLeave={() => onMouseLeave()}
+      />
     </>
   );
 };

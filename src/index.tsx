@@ -19,6 +19,7 @@ import { RouteProviderComponent } from "./providers/route.provider";
 import { WebSocketProvider } from "./providers/websocket.provider";
 import reportWebVitals from "./reportWebVitals";
 import store from "./store";
+import { theme } from "./theme";
 
 const router = createBrowserRouter([
   {
@@ -107,14 +108,12 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <ChakraProvider>
+  <ChakraProvider theme={theme}>
     <ResponseProvider>
       <Provider store={store}>
         <WebSocketProvider>
           <CallProviderComponent>
-            <div className="h-screen w-screen bg-gray-100">
-              <RouterProvider router={router} />
-            </div>
+            <RouterProvider router={router} />
           </CallProviderComponent>
         </WebSocketProvider>
       </Provider>

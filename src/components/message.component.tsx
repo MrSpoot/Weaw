@@ -19,7 +19,7 @@ const MessageComponent: FunctionComponent<{ message: Message }> = ({
 
   return (
     <CardComponent>
-      <Flex gap={2}>
+      <Flex gap={2} textColor={"gray.200"} fontWeight={"semibold"}>
         <Avatar name={message.sender.nickname} />
         <Flex direction={"column"}>
           <Text>{message.sender.nickname}</Text>

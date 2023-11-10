@@ -45,9 +45,10 @@ const ChannelListContainer = () => {
     <Flex
       direction="column"
       w="250px"
-      bg="gray.850"
+      bg="backgroundColor.400"
+      flex={1}
       overflowY="auto"
-      p={2}
+      textColor={"gray.200"}
       gap={1}
     >
       <Flex
@@ -55,17 +56,31 @@ const ChannelListContainer = () => {
         justifyContent={"center"}
         alignItems={"center"}
         gap={2}
+        mb={4}
       >
-        <Text fontSize={"2xl"}>{server?.name}</Text>
+        <Text p={4} fontSize={"2xl"}>
+          {server?.name}
+        </Text>
         <Menu>
           <MenuButton
             as={IconButton}
             aria-label="Options"
-            icon={<HamburgerIcon />}
-            variant="outline"
+            _hover={{ color: "gray.200" }}
+            size={"lg"}
+            icon={
+              <HamburgerIcon
+                color={"gray.500"}
+                _hover={{ color: "gray.200" }}
+              />
+            }
+            variant={"ghost"}
           />
-          <MenuList>
-            <MenuItem icon={<AddIcon />} onClick={() => createServerInvite()}>
+          <MenuList bg={"backgroundColor.800"}>
+            <MenuItem
+              icon={<AddIcon />}
+              bg={"backgroundColor.800"}
+              onClick={() => createServerInvite()}
+            >
               Create invite
             </MenuItem>
           </MenuList>
@@ -81,7 +96,7 @@ const ChannelListContainer = () => {
 const ChannelCardComponent: React.FC<{ conversation: Conversation }> = ({
   conversation,
 }) => {
-  return <Box>{"# " + conversation.name}</Box>;
+  return <Box pl={4}>{"# " + conversation.name}</Box>;
 };
 
 export default ChannelListContainer;
