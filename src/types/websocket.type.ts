@@ -1,11 +1,13 @@
 import { Conversation } from "./conversation.type";
+import { UserStatus } from "./user.type";
 
 export type WebSocketMessageActionType =
   | "PRIVATE_MESSAGE"
   | "FRIENDS_REQUEST"
   | "FRIENDS_REQUEST_RESPONSE"
   | "PRIVATE_RESPONSE"
-  | "CALL";
+  | "CALL"
+  | "USER_STATUS"
 
 // Création d'un type pour la fonction de rappel
 export type MessageReceivedCallback = (data: any) => void;
@@ -25,6 +27,11 @@ export type WebSocketPrivateMessagePayload = {
   conversationId: string;
   messageId?: string;
   message: string;
+};
+
+export type WebSocketUserStatusPayload = {
+  userId: string
+  status: UserStatus
 };
 
 export type WebSocketCallPayload = {

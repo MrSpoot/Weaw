@@ -1,49 +1,53 @@
 import { ChatIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Avatar, AvatarBadge, Flex, IconButton, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
+import { useCall } from "../providers/call.provider";
 import { useRoute } from "../providers/route.provider";
-import { useWebSocket } from "../providers/websocket.provider";
+import { setCall } from "../reducer/slice/callSlice.ts";
 import {
   AppDispatch,
   addConversation,
 } from "../reducer/slice/conversationSlice";
 import conversationService from "../services/conversation.service";
 import { RootState } from "../store";
-import { User } from "../types/user.type";
+import { User, UserStatus } from "../types/user.type";
 import CardComponent from "./card.component";
 import { PhoneIcon } from "./icon.components";
-import { setCall } from "../reducer/slice/callSlice.ts";
-import { useCall } from "../providers/call.provider";
 
-const getStatus = (status: string) => {
-  if (status === "online") {
-    return <AvatarBadge borderColor="green.100" bg="green.300" boxSize="1em" />;
-  } else if (status === "absent") {
-    return (
-      <AvatarBadge borderColor="orange.100" bg="orange.300" boxSize="1em" />
-    );
-  } else if (status === "red") {
-    return <AvatarBadge borderColor="red.100" bg="red.300" boxSize="1em" />;
-  } else {
-    return <AvatarBadge borderColor="gray.100" bg="gray.300" boxSize="1em" />;
+const getStatus = (status: UserStatus) => {
+  switch (status) {
+    case "ONLINE":
+      return (
+        <AvatarBadge borderColor="green.100" bg="green.300" boxSize="1em" />
+      );
+    case "OFFLINE":
+    case "INVISIBLE":
+    default:
+      return <AvatarBadge borderColor="gray.100" bg="gray.300" boxSize="1em" />;
   }
+
+  // if (status === "online") {
+
+  // } else if (status === "absent") {
+  //   return (
+  //     <AvatarBadge borderColor="orange.100" bg="orange.300" boxSize="1em" />
+  //   );
+  // } else if (status === "red") {
+  //   return <AvatarBadge borderColor="red.100" bg="red.300" boxSize="1em" />;
+  // } else {
+
+  // }
 };
 
 const FriendCardComponent: React.FC<{
   user: User;
   onClick: (user: User) => void;
 }> = ({ user, onClick }) => {
-  const phrases: string[] = ["online", "red", "absent", "disconnect"];
   const userState = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch<AppDispatch>();
   const { navigateTo } = useRoute();
 
   const { startCall } = useCall();
-
-  const handleRandomize = () => {
-    const randomIndex = Math.floor(Math.random() * phrases.length);
-    return phrases[randomIndex];
-  };
 
   const _startCall = () => {
     if (userState.actualUser) {
@@ -85,10 +89,10 @@ const FriendCardComponent: React.FC<{
         alignItems={"center"}
       >
         <Flex gap={4}>
-          <Avatar>{getStatus(handleRandomize())}</Avatar>
+          <Avatar>{getStatus(user.userStatus)}</Avatar>
           <Flex direction={"column"}>
             <Text>{user.nickname}</Text>
-            <Text fontSize={"sm"}>En ligne</Text>
+            <Text fontSize={"sm"}>{user.userStatus}</Text>
           </Flex>
         </Flex>
         <Flex gap={2}>

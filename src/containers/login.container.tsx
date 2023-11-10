@@ -162,8 +162,6 @@ const RegistrationForm: React.FC<{ toggleForm: () => void }> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const activeStepText = steps[activeStep].description;
-
   const max = steps.length - 1;
   const progressPercent = (activeStep / max) * 100;
 
@@ -172,6 +170,7 @@ const RegistrationForm: React.FC<{ toggleForm: () => void }> = ({
     nickname: "",
     email: "",
     password: "",
+    userStatus: "OFFLINE",
   });
   const [confirmPassword, setConfirmPassword] = useState("");
 

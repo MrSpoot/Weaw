@@ -5,12 +5,13 @@ import FriendCardComponent from "../components/friend.card.component";
 import FriendRequestCardComponent from "../components/friend.request.card.component";
 import { useWebSocket } from "../providers/websocket.provider";
 import { RootState } from "../store";
+import { UserStatus } from "../types/user.type";
 import {
   WebSocketFriendRequestPayload,
   WebSocketMessage,
 } from "../types/websocket.type";
 
-type Page = "ADD" | "ONLINE" | "WAITING";
+type Page = "ADD" | "ONLINE" | "WAITING" | "ALL";
 
 const FriendsContainer = () => {
   const [page, setPage] = useState<Page>("ONLINE");
@@ -18,6 +19,9 @@ const FriendsContainer = () => {
   return (
     <Flex direction={"column"} w={"100%"} gap={2} p={2}>
       <Flex gap={2} mb={4}>
+        <Button h={8} onClick={() => setPage("ALL")} colorScheme={"gray"}>
+          Tous
+        </Button>
         <Button h={8} onClick={() => setPage("ONLINE")} colorScheme={"gray"}>
           En Ligne
         </Button>
@@ -29,7 +33,8 @@ const FriendsContainer = () => {
         </Button>
       </Flex>
       {page === "ADD" && <AddFriendPageComponent />}
-      {page === "ONLINE" && <FriendListPageComponent />}
+      {page === "ONLINE" && <FriendListPageComponent status="ONLINE" />}
+      {page === "ALL" && <FriendListPageComponent />}
       {page === "WAITING" && <FriendWaitingListPageComponent />}
     </Flex>
   );
@@ -80,7 +85,9 @@ const AddFriendPageComponent = () => {
   );
 };
 
-const FriendListPageComponent = () => {
+const FriendListPageComponent: React.FC<{ status?: UserStatus }> = ({
+  status,
+}) => {
   const userState = useSelector((state: RootState) => state.users);
   return (
     <>
@@ -88,9 +95,17 @@ const FriendListPageComponent = () => {
 
       <VStack flex={1}>
         <Flex direction="column" overflowY="auto" gap={2} w={"100%"}>
-          {userState.social?.friends.map((friends, i) => (
-            <FriendCardComponent key={i} user={friends} onClick={() => {}} />
-          ))}
+          {userState.social?.friends
+            .filter((u) => {
+              if (status) {
+                return status === u.userStatus;
+              } else {
+                return true;
+              }
+            })
+            .map((friends, i) => (
+              <FriendCardComponent key={i} user={friends} onClick={() => {}} />
+            ))}
         </Flex>
       </VStack>
     </>

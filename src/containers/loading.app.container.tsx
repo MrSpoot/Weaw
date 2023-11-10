@@ -12,7 +12,6 @@ import { fetchAndAddConversations } from "../reducer/thunk/conversation.tunk";
 import conversationService from "../services/conversation.service";
 import userService from "../services/user.service";
 import { RootState } from "../store";
-import WebsocketContainer from "./websocket.container";
 
 const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
   children,
@@ -32,7 +31,6 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
     const token = Cookies.get("userToken");
     if (token) {
       http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      connect(token);
     }
 
     const promises: Promise<any>[] = [];
@@ -56,6 +54,7 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
     Promise.all(promises)
       .then(() => {
         setIsLoading(false);
+        token && connect(token);
         if (location.pathname === "/") {
           navigateTo("app");
         } else {
@@ -68,18 +67,14 @@ const LoadingAppContainer: FunctionComponent<{ children: JSX.Element }> = ({
       });
   }, []);
 
-  return (
-    <WebsocketContainer>
-      {isLoading ||
-      !!!appState.isWebSocketConnected ||
-      !!!userState.actualUser ? (
-        <div className="flex h-full w-full items-center justify-center">
-          <LoaderComponent />
-        </div>
-      ) : (
-        children
-      )}
-    </WebsocketContainer>
+  return isLoading ||
+    !!!appState.isWebSocketConnected ||
+    !!!userState.actualUser ? (
+    <div className="flex h-full w-full items-center justify-center">
+      <LoaderComponent />
+    </div>
+  ) : (
+    children
   );
 };
 

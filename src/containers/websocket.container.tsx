@@ -1,14 +1,6 @@
 import { useEffect } from "react";
-import { useRoute } from "../providers/route.provider";
-import { useWebSocket } from "../providers/websocket.provider";
-import {
-  WebRTCMessage,
-  WebSocketCallPayload,
-  WebSocketFriendRequestResponsePayload,
-  WebSocketMessage,
-  WebSocketMessageEvent,
-} from "../types/websocket.type";
 import { useDispatch, useSelector } from "react-redux";
+import { useWebSocket } from "../providers/websocket.provider";
 import { setCall } from "../reducer/slice/callSlice.ts";
 import {
   AppDispatch,
@@ -18,42 +10,97 @@ import {
 import {
   addSocialRequest,
   processSocialRequestResponse,
+  setSocial,
+  setUser,
 } from "../reducer/slice/userSlice";
 import conversationService from "../services/conversation.service";
 import { RootState } from "../store";
-import { SocialRequest } from "../types/social.type";
 import { Message } from "../types/message.type";
-import { Conversation } from "../types/conversation.type";
+import { SocialRequest } from "../types/social.type";
+import {
+  WebSocketCallPayload,
+  WebSocketFriendRequestResponsePayload,
+  WebSocketMessage,
+  WebSocketUserStatusPayload,
+} from "../types/websocket.type";
 
 const WebsocketContainer: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
   const { sendMessage } = useWebSocket();
-
+  const messageQueue: WebSocketMessage[] = [];
   const conversationState = useSelector(
     (state: RootState) => state.conversations
   );
-  const actualUser = useSelector((state: RootState) => state.users.actualUser);
+  const userState = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleMessage = (data: any) => {
     processWebSocketMessage(data.data as WebSocketMessage);
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const processQueue = () => {
+    while (messageQueue.length > 0) {
+      const message = messageQueue.shift(); // Prend le premier message de la file d'attente
+      message && processWebSocketMessage(message);
+    }
+  };
+
+  useEffect(() => {
+    processQueue();
+  }, [processQueue, userState.actualUser]);
 
   const processWebSocketMessage = (object: WebSocketMessage) => {
-    switch (object.actionType) {
-      case "PRIVATE_RESPONSE":
-        processPrivateMessageReception(object);
-        break;
-      case "FRIENDS_REQUEST":
-        processFriendMessageReception(object);
-        break;
-      case "FRIENDS_REQUEST_RESPONSE":
-        processFriendResponseMessageReception(object);
-        break;
-      case "CALL":
-        processCallRequestReception(object);
-        break;
+    if (userState.actualUser) {
+      switch (object.actionType) {
+        case "PRIVATE_RESPONSE":
+          processPrivateMessageReception(object);
+          break;
+        case "FRIENDS_REQUEST":
+          processFriendMessageReception(object);
+          break;
+        case "FRIENDS_REQUEST_RESPONSE":
+          processFriendResponseMessageReception(object);
+          break;
+        case "CALL":
+          processCallRequestReception(object);
+          break;
+        case "USER_STATUS":
+          processUserStatusReception(object);
+          break;
+      }
+    } else {
+      messageQueue.push(object);
+    }
+  };
+
+  const processUserStatusReception = (message: WebSocketMessage) => {
+    const payload = message.payload as WebSocketUserStatusPayload;
+    if (userState.actualUser?.id === payload.userId) {
+      dispatch(
+        setUser({
+          ...userState.actualUser,
+          userStatus: payload.status,
+        })
+      );
+    } else {
+      const updatedFriends = userState.social?.friends.map((friend) => {
+        if (friend.id === payload.userId) {
+          return {
+            ...friend,
+            userStatus: payload.status,
+          };
+        }
+        return friend;
+      });
+      if (updatedFriends && userState.social) {
+        dispatch(
+          setSocial({
+            ...userState.social,
+            friends: updatedFriends,
+          })
+        );
+      }
     }
   };
 
@@ -85,8 +132,7 @@ const WebsocketContainer: React.FC<{ children: JSX.Element }> = ({
 
   const processCallRequestReception = (message: WebSocketMessage) => {
     const payload = message.payload as WebSocketCallPayload;
-    console.log(actualUser);
-    if (actualUser) {
+    if (userState.actualUser) {
       if (payload.webRTCInfo.type === "offer") {
         dispatch(
           setCall({
@@ -130,7 +176,7 @@ const WebsocketContainer: React.FC<{ children: JSX.Element }> = ({
                 const webSocketMessage: WebSocketMessage = {
                   actionType: "CALL",
                   payload: callPayload,
-                  sender: actualUser?.id ?? "",
+                  sender: userState.actualUser?.id ?? "",
                   timestamp: new Date().toISOString(),
                 };
                 sendMessage(webSocketMessage);

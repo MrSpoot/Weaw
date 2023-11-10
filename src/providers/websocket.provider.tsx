@@ -1,16 +1,6 @@
-import React, { useEffect } from "react";
-import { Conversation } from "../types/conversation.type";
-import {
-  WebRTCMessage,
-  WebSocketCallPayload,
-  WebSocketMessage,
-} from "../types/websocket.type";
+import React from "react";
+import { WebSocketMessage } from "../types/websocket.type";
 import { useWebSocketManager } from "./hook/useWebSocketManager";
-import { useDispatch, useSelector } from "react-redux";
-import { setCall } from "../reducer/slice/callSlice.ts";
-import { RootState } from "../store";
-import { AppDispatch } from "../reducer/slice/conversationSlice";
-import { User } from "../types/user.type";
 
 type ContainerProps = {
   children: React.ReactNode;

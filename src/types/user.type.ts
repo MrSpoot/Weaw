@@ -3,4 +3,8 @@ export type User = {
   nickname: string;
   email: string;
   password: string;
+  userStatus: UserStatus;
 };
+
+
+export type UserStatus = "ONLINE" | "OFFLINE" | "INVISIBLE"
