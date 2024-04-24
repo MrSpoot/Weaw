@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html {
-    font-family: Monaco, system-ui, sans-serif;
-  }
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&display=swap");
+
+body {
+  @apply font-mono;
 }
 
 /* width */

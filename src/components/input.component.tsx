@@ -1,32 +1,17 @@
-import { FunctionComponent } from "react";
+import { HTMLInputTypeAttribute } from "react";
 
-const InputComponent: FunctionComponent<{
-  placeholder?: string;
-  setValue?: (value: string) => void;
-  secret?: boolean;
-  onErrorText?: string;
-  onError?: boolean;
-}> = ({
-  placeholder,
-  setValue,
-  secret = false,
-  onErrorText,
-  onError = false,
-}) => {
+const InputComponent: React.FC<{
+  placeholder: string;
+  type: HTMLInputTypeAttribute;
+}> = ({ placeholder, type }) => {
   return (
-    <div>
+    <>
       <input
-        className="w-full h-12 rounded-lg p-4 focus:outline-none border-[#6059e8] border-2"
-        type={secret ? "password" : "text"}
+        className="bg-gray-200 rounded-xl w-full h-14 pl-4"
         placeholder={placeholder}
-        onChange={(event) => setValue && setValue(event.target.value)}
+        type={type}
       ></input>
-      {onError && (
-        <div className=" text-sm font-bold text-red-400">
-          {"* " + onErrorText}
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 
