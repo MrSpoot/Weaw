@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
+import LoginContainer from "./containers/login.container";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import LoginContainer from "./containers/login.container";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <LoginContainer></LoginContainer>

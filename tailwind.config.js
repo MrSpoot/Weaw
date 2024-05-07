@@ -11,5 +11,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'), // Ceci améliore les éléments de formulaire
+  ],
 };
