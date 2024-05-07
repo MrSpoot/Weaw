@@ -12,7 +12,7 @@ const LoginContainer: React.FC = () => {
       <div className="flex bg-gray-300 w-screen h-screen">
         <div className="flex w-full h-full justify-center items-center">
           <div
-            className="flex bg-red-600 rounded-3xl shadow-2xl p-16 bg-cover bg-center"
+            className="flex rounded-3xl shadow-2xl p-16 bg-cover bg-center"
             style={{
               backgroundImage: `url(${svg})`,
             }}

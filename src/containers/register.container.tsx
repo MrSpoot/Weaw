@@ -1,4 +1,5 @@
 import { useState } from "react";
+import svg from "../assets/layered-waves-haikei.svg";
 import ButtonComponent from "../components/button.component";
 import InputComponent from "../components/input.component";
 
@@ -17,17 +18,22 @@ const RegisterContainer: React.FC = () => {
 
   return (
     <>
-      <div className="flex bg-gray-300 w-screen h-screen">
+      <div className="flex bg-white w-screen h-screen">
         <div className="flex w-full h-full justify-center items-center">
-          <div className="flex bg-white rounded-3xl w-1/2 shadow-2xl p-8 ">
+          <div
+            className="flex rounded-3xl shadow-2xl p-16 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${svg})`,
+            }}
+          >
             <div className="flex flex-col gap-4">
-              <span className=" text-5xl font-bold mt-8">
+              <span className=" text-white text-5xl font-bold mt-8">
                 Create new account
-                <span className=" text-5xl font-bold text-blue-400">.</span>
+                <span className=" text-5xl font-bold text-[#fa7268]">.</span>
               </span>
               <span className=" text-md text-gray-400 mb-8">
                 Already A Member ?
-                <span className="text-md text-blue-400">{" Log In"}</span>
+                <span className="text-md text-[#fa7268]">{" Log In"}</span>
               </span>
               <div className="flex flex-col gap-4 w-11/12">
                 <div className="flex w-full gap-4">

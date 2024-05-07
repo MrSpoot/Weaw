@@ -4,6 +4,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  // <RegisterContainer></RegisterContainer>
   <LoginContainer></LoginContainer>
 );
 
