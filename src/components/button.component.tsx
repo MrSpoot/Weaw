@@ -5,7 +5,7 @@ const ButtonComponent: React.FC<{ text: string; onClick?: () => void }> = ({
   return (
     <>
       <div
-        className="flex h-14 w-full bg-blue-400 rounded-xl items-center justify-center"
+        className="flex h-14 w-full bg-[#fa7268] hover:bg-[#ef5f67] rounded-xl items-center justify-center"
         onClick={onClick}
       >
         <span>{text}</span>
