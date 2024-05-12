@@ -1,3 +1,4 @@
+import { Input } from "@chakra-ui/react";
 import { HTMLInputTypeAttribute } from "react";
 
 const InputComponent: React.FC<{
@@ -7,12 +8,17 @@ const InputComponent: React.FC<{
 }> = ({ placeholder, type, onChange }) => {
   return (
     <>
-      <input
-        className="bg-gray-200 rounded-xl w-full h-14"
-        placeholder={placeholder}
+      <Input
+        textColor={"whitesmoke"}
+        bgColor={"#0e0e10"}
+        h={"3.5rem"}
+        w={"100%"}
+        rounded={"9999px"}
+        border={"none"}
         type={type}
+        placeholder={placeholder}
         onChange={onChange}
-      ></input>
+      ></Input>
     </>
   );
 };

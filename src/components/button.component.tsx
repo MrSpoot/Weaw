@@ -1,15 +1,21 @@
+import { Button } from "@chakra-ui/react";
+
 const ButtonComponent: React.FC<{ text: string; onClick?: () => void }> = ({
   text,
   onClick,
 }) => {
   return (
     <>
-      <div
-        className="flex h-14 w-full bg-[#fa7268] hover:bg-[#ef5f67] rounded-xl items-center justify-center"
+      <Button
+        bgColor={"#fa7268"}
+        _hover={{ bg: "#ef5f67" }}
+        rounded={"0.75rem"}
+        w={"100%"}
+        h={"3.5rem"}
         onClick={onClick}
       >
-        <span>{text}</span>
-      </div>
+        {text}
+      </Button>
     </>
   );
 };
