@@ -4,13 +4,13 @@ This repository contains the frontend for a real-time messaging application, ins
 
 ## Features
 
-Private Messaging: One-on-one conversations with other users.
+- Private Messaging: One-on-one conversations with other users.
 
-Groups: Chat with multiple users in a shared space.
+- Groups: Chat with multiple users in a shared space.
 
-Servers and Channels: Organize communication into servers with dedicated channels for specific topics or interests.
+- Servers and Channels: Organize communication into servers with dedicated channels for specific topics or interests.
 
-Real-Time Communication: Messages are delivered instantly using WebSocket technology.
+- Real-Time Communication: Messages are delivered instantly using WebSocket technology.
 
 ## Back-End
 
